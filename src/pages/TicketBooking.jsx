@@ -95,7 +95,7 @@ const TicketBooking = () => {
 
                   <div className="pt-3 border-t border-outline-variant/40 dark:border-slate-700 flex items-center justify-between text-xs font-bold">
                     <span className="text-on-surface dark:text-slate-200">
-                      {t('berthDetails')} <span className="text-primary font-extrabold">Coach {ticket.coach}, Seat {ticket.seat}</span>
+                      {t('berthDetails')} <span className="text-primary font-extrabold">{t('coachWord')} {ticket.coach}, {t('seatWord')} {ticket.seat}</span>
                     </span>
 
                     <div className="flex items-center gap-2">
@@ -145,7 +145,7 @@ const TicketBooking = () => {
                       <StatusBadge status={c.status} />
                     </div>
                     <p className="text-xs font-bold text-on-surface dark:text-white">{c.title}</p>
-                    <p className="text-[11px] text-on-surface-variant dark:text-slate-400">{c.trainName} • Coach {c.coach}</p>
+                    <p className="text-[11px] text-on-surface-variant dark:text-slate-400">{c.trainName} • {t('coachWord')} {c.coach}</p>
                   </div>
                   <div className="text-right shrink-0">
                     <span className="text-[11px] font-bold text-primary block">
@@ -180,7 +180,7 @@ const TicketBooking = () => {
             <div className="space-y-2 text-xs font-semibold text-on-surface-variant dark:text-slate-300">
               <div className="flex justify-between py-1 border-b border-outline-variant/40 dark:border-slate-700">
                 <span>{t('loyaltyTier')}</span>
-                <span className="text-primary font-bold">Gold Sleeper Club</span>
+                <span className="text-primary font-bold">{t('loyaltyClub')}</span>
               </div>
               <div className="flex justify-between py-1 border-b border-outline-variant/40 dark:border-slate-700">
                 <span>{t('verifiedMobile')}</span>

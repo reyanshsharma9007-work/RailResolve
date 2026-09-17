@@ -183,7 +183,7 @@ const ReportComplaint = () => {
             required
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Provide specific details to help the on-board technician resolve the issue quickly..."
+            placeholder={t('detailedDescPlaceholder')}
             className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl p-4 text-xs font-semibold text-on-surface dark:text-white focus:outline-none focus:border-primary transition-all"
           ></textarea>
         </div>
@@ -207,7 +207,7 @@ const ReportComplaint = () => {
             <div className="relative flex items-center bg-surface-container-low dark:bg-slate-800 border border-dashed border-outline dark:border-slate-700 rounded-2xl px-4 py-2.5 cursor-pointer hover:bg-surface-container dark:hover:bg-slate-750 transition-colors">
               <span className="material-symbols-outlined text-outline dark:text-slate-400 text-[20px] mr-2">cloud_upload</span>
               <span className="text-xs font-bold text-on-surface-variant dark:text-slate-300 truncate">
-                {photoName || 'Click to select image file'}
+                {photoName || t('photoPlaceholder')}
               </span>
               <input
                 type="file"

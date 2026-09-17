@@ -107,7 +107,7 @@ const AdminDashboard = () => {
               onChange={(e) => setStatusFilter(e.target.value)}
               className="bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs font-bold text-on-surface dark:text-white focus:outline-none focus:border-primary"
             >
-              <option value="ALL">All Statuses</option>
+              <option value="ALL">{t('allStatuses')}</option>
               <option value="OPEN">{t('statusOpen')}</option>
               <option value="IN_PROGRESS">{t('statusInProgress')}</option>
               <option value="RESOLVED">{t('statusResolved')}</option>
@@ -121,7 +121,7 @@ const AdminDashboard = () => {
               onChange={(e) => setPriorityFilter(e.target.value)}
               className="bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs font-bold text-on-surface dark:text-white focus:outline-none focus:border-primary"
             >
-              <option value="ALL">All Priorities</option>
+              <option value="ALL">{t('allPriorities')}</option>
               <option value="HIGH">{t('priorityHigh')}</option>
               <option value="MEDIUM">{t('priorityMedium')}</option>
               <option value="LOW">{t('priorityLow')}</option>
@@ -137,7 +137,7 @@ const AdminDashboard = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search Ref, PNR, Train..."
+              placeholder={t('searchPlaceholderAdmin')}
               className="w-full bg-transparent border-none outline-none text-xs font-bold text-on-surface dark:text-white placeholder:text-outline"
             />
           </div>
@@ -190,7 +190,7 @@ const AdminDashboard = () => {
                     </td>
                     <td className="p-4">
                       <p className="font-bold text-on-surface dark:text-white">{c.trainName}</p>
-                      <span className="text-[11px] text-on-surface-variant dark:text-slate-400">Coach {c.coach}, Seat {c.seat}</span>
+                      <span className="text-[11px] text-on-surface-variant dark:text-slate-400">{t('coachWord')} {c.coach}, {t('seatWord')} {c.seat}</span>
                     </td>
                     <td className="p-4 max-w-xs">
                       <span className="text-[10px] font-bold text-primary bg-primary-fixed dark:bg-orange-950 dark:text-orange-200 px-2 py-0.5 rounded-full block w-max mb-1">
@@ -211,7 +211,7 @@ const AdminDashboard = () => {
                       </div>
                     </td>
                     <td className="p-4 text-xs font-bold text-on-surface dark:text-white">
-                      {c.assignedTo || <span className="text-error italic">Unassigned</span>}
+                      {c.assignedTo || <span className="text-error italic">{t('unassignedText')}</span>}
                     </td>
                     <td className="p-4 text-right">
                       <div className="flex items-center justify-end gap-2">
@@ -260,8 +260,8 @@ const AdminDashboard = () => {
                 {selectedComplaint.description}
               </p>
               <div className="flex items-center gap-4 text-xs font-bold text-on-surface dark:text-white">
-                <span>Passenger: {selectedComplaint.passengerName} ({selectedComplaint.passengerPhone})</span>
-                <span>Coach {selectedComplaint.coach}, Seat {selectedComplaint.seat}</span>
+                <span>{t('passengerLabel', 'Passenger')}: {selectedComplaint.passengerName} ({selectedComplaint.passengerPhone})</span>
+                <span>{t('coachWord')} {selectedComplaint.coach}, {t('seatWord')} {selectedComplaint.seat}</span>
               </div>
             </div>
 

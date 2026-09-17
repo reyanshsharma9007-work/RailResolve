@@ -86,20 +86,20 @@ const Login = () => {
                 <span>RailResolve Portal</span>
               </div>
               <h1 className="text-3xl lg:text-4xl font-extrabold text-white leading-tight tracking-tight drop-shadow-md">
-                Next-Gen Rail Redressal,<br />
-                <span className="text-orange-400">At High Speed.</span>
+                {t('nextGenTitle')}<br />
+                <span className="text-orange-400">{t('nextGenHighlight')}</span>
               </h1>
               <p className="text-slate-300 text-sm mt-3 max-w-xs leading-relaxed font-medium">
-                Swift grievance resolution &amp; transparent real-time tracking gateway.
+                {t('nextGenSub')}
               </p>
             </div>
             <div className="pt-8">
               <div className="backdrop-blur-md bg-slate-950/70 border border-slate-800/80 rounded-2xl p-3.5 flex items-center justify-between text-xs text-slate-300 font-mono shadow-xl hover:border-orange-500/40 transition-colors">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span className="text-white font-bold">Grid Telemetry</span>
+                  <span className="text-white font-bold">{t('gridTelemetry')}</span>
                 </div>
-                <span className="text-orange-400 font-semibold">Avg SLA: 18m</span>
+                <span className="text-orange-400 font-semibold">{t('avgSla')}</span>
               </div>
             </div>
           </div>
@@ -195,20 +195,20 @@ const Login = () => {
               <h2 className="text-xl font-extrabold text-on-surface dark:text-white tracking-tight">
                 {authMode === 'signin'
                   ? selectedRole === 'admin'
-                    ? 'Admin Portal Access'
-                    : 'Passenger Portal Login'
+                    ? t('adminLoginTitle')
+                    : t('passengerLoginTitle')
                   : selectedRole === 'admin'
-                  ? 'Register Admin Profile'
-                  : 'Create Passenger Account'}
+                  ? t('adminRegisterTitle')
+                  : t('passengerRegisterTitle')}
               </h2>
               <p className="text-xs text-on-surface-variant dark:text-slate-400 mt-1">
                 {authMode === 'signin'
                   ? selectedRole === 'admin'
-                    ? 'Enter admin username or email credentials'
-                    : 'Enter registered email, mobile, or PNR number'
+                    ? t('adminLoginSub')
+                    : t('passengerLoginSub')
                   : selectedRole === 'admin'
-                  ? 'Fill details with official authorization key'
-                  : 'Enter your personal journey details to register'}
+                  ? t('adminRegisterSub')
+                  : t('passengerRegisterSub')}
               </p>
             </div>
 
@@ -217,7 +217,7 @@ const Login = () => {
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div>
                   <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">
-                    {selectedRole === 'admin' ? 'Admin Username / Email' : 'Email, Mobile Number or PNR'}
+                    {selectedRole === 'admin' ? t('adminIdentifierLabel') : t('signInIdentifierLabel')}
                   </label>
                   <div className="relative flex items-center bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl px-3.5 py-3 hover:border-primary/50 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
                     <span className="material-symbols-outlined text-outline dark:text-slate-400 text-[20px] mr-2">
@@ -367,7 +367,7 @@ const Login = () => {
 
           <div className="pt-6 border-t border-outline-variant/40 dark:border-slate-800 text-center">
             <p className="text-[11px] text-on-surface-variant dark:text-slate-400 font-medium">
-              By continuing, you agree to Indian Railways Digital Resolution Terms &amp; Conditions.
+              {t('termsNotice')}
             </p>
           </div>
         </div>

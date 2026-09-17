@@ -34,12 +34,12 @@ const Complaint = () => {
   if (!activeComplaint) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <h2 className="text-xl font-bold text-on-surface dark:text-white">No Grievance Found</h2>
+        <h2 className="text-xl font-bold text-on-surface dark:text-white">{t('noGrievanceFound')}</h2>
         <p className="text-xs text-on-surface-variant dark:text-slate-400 mt-2">
-          The requested reference number was not found in active telemetry.
+          {t('noGrievanceSub')}
         </p>
         <Link to="/" className="mt-4 inline-block px-4 py-2 bg-primary text-on-primary rounded-full text-xs font-bold">
-          Return to Overview
+          {t('returnOverview')}
         </Link>
       </div>
     );
@@ -79,7 +79,7 @@ const Complaint = () => {
             {activeComplaint.title}
           </h1>
           <p className="text-xs text-on-surface-variant dark:text-slate-400 font-medium mt-1">
-            Logged on {activeComplaint.createdAt} • Category: <span className="font-bold text-primary">{activeComplaint.category}</span>
+            {t('loggedOn', 'Logged on')} {activeComplaint.createdAt} • {t('categoryLabel')}: <span className="font-bold text-primary">{activeComplaint.category}</span>
           </p>
         </div>
 
@@ -162,7 +162,7 @@ const Complaint = () => {
               <span className="font-bold text-on-surface dark:text-white">{t('attachmentsPhotos')}</span>
               <span className="text-primary font-bold flex items-center gap-1 cursor-pointer">
                 <span className="material-symbols-outlined text-[16px]">photo_library</span>
-                1 Photo Attached
+                {t('viewPhotos')}
               </span>
             </div>
           </div>
@@ -188,7 +188,7 @@ const Complaint = () => {
               </div>
               <div className="p-3 bg-surface-container-low dark:bg-slate-800 rounded-xl">
                 <p className="font-bold text-on-surface dark:text-white">{t('controlRoom')}</p>
-                <p className="text-on-surface-variant dark:text-slate-300 font-medium">Northern Railway - Executive Control</p>
+                <p className="text-on-surface-variant dark:text-slate-300 font-medium">{t('controlRoomVal')}</p>
               </div>
             </div>
           </div>
@@ -255,7 +255,7 @@ const Complaint = () => {
               </div>
               <div className="flex justify-between py-1.5 border-b border-outline-variant/40 dark:border-slate-700">
                 <span className="text-on-surface-variant dark:text-slate-400">{t('coachBerthLabel')}</span>
-                <span className="font-bold text-on-surface dark:text-white">Coach {activeComplaint.coach}, Seat {activeComplaint.seat}</span>
+                <span className="font-bold text-on-surface dark:text-white">{t('coachWord')} {activeComplaint.coach}, {t('seatWord')} {activeComplaint.seat}</span>
               </div>
               <div className="flex justify-between py-1.5 border-b border-outline-variant/40 dark:border-slate-700">
                 <span className="text-on-surface-variant dark:text-slate-400">{t('currentSpeedLabel')}</span>

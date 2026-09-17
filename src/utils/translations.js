@@ -20,6 +20,7 @@ export const translations = {
     myAccount: "My Account",
     lightMode: "Switch to Light Mode",
     darkMode: "Switch to Dark Mode",
+    passengerLabel: "Passenger",
 
     // Auth & Login/Register Page
     nextGenTitle: "Next-Gen Rail Redressal,",
@@ -109,6 +110,8 @@ export const translations = {
     fileReport: "File Report",
     charterTitle: "Citizen Charter & SLA Commitment",
     charterSub: "Indian Railways mandates strict SLA timeframes for operations. Escalations trigger automatically if time limits pass.",
+    citizenCharterTitle: "Citizen Charter & SLA Commitment",
+    loggedOn: "Logged on",
     resolutionMatrix: "Guaranteed Resolution Matrix",
     categoryCol: "Category",
     responderCol: "Primary Responder",
@@ -314,6 +317,7 @@ export const translations = {
     myAccount: "मेरा खाता",
     lightMode: "लाइट मोड पर स्विच करें",
     darkMode: "डार्क मोड पर स्विच करें",
+    passengerLabel: "यात्री",
 
     // Auth & Login/Register Page
     nextGenTitle: "अगली पीढ़ी का रेल निवारण,",
@@ -403,6 +407,8 @@ export const translations = {
     fileReport: "रिपोर्ट दर्ज करें",
     charterTitle: "नागरिक चार्टर एवं एसएलए प्रतिबद्धता",
     charterSub: "भारतीय रेल संचालन के लिए सख्त एसएलए समय-सीमा अनिवार्य करती है। समय सीमा बीत जाने पर ऑटोमैटिक एस्केलेशन ट्रिगर होता है।",
+    citizenCharterTitle: "नागरिक चार्टर एवं एसएलए प्रतिबद्धता",
+    loggedOn: "पंजीकृत",
     resolutionMatrix: "गारंटीकृत समाधान मैट्रिक्स",
     categoryCol: "श्रेणी",
     responderCol: "प्राथमिक उत्तरदाता",

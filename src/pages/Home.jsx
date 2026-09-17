@@ -24,6 +24,51 @@ const Home = () => {
     setFaqOpen((prev) => ({ ...prev, [idx]: !prev[idx] }));
   };
 
+  const categories = [
+    {
+      icon: "cleaning_services",
+      titleKey: "cleanlinessTitle",
+      descKey: "cleanlinessDesc",
+      cat: "cleanliness"
+    },
+    {
+      icon: "ac_unit",
+      titleKey: "electricalTitle",
+      descKey: "electricalDesc",
+      cat: "electrical"
+    },
+    {
+      icon: "restaurant",
+      titleKey: "cateringTitle",
+      descKey: "cateringDesc",
+      cat: "catering"
+    },
+    {
+      icon: "shield",
+      titleKey: "securityTitle",
+      descKey: "securityDesc",
+      cat: "security"
+    },
+    {
+      icon: "medical_services",
+      titleKey: "medicalTitle",
+      descKey: "medicalDesc",
+      cat: "medical"
+    },
+    {
+      icon: "chair",
+      titleKey: "amenitiesTitle",
+      descKey: "amenitiesDesc",
+      cat: "amenities"
+    }
+  ];
+
+  const faqs = [
+    { qKey: 'faq1Q', aKey: 'faq1A' },
+    { qKey: 'faq2Q', aKey: 'faq2A' },
+    { qKey: 'faq3Q', aKey: 'faq3A' },
+  ];
+
   return (
     <div className="flex flex-col w-full">
       {/* Top Hero Scenic Section */}
@@ -46,7 +91,7 @@ const Home = () => {
             <span className="w-2.5 h-2.5 rounded-full bg-secondary animate-ping"></span>
             <span className="w-2 h-2 rounded-full bg-primary -ml-3.5"></span>
             <span className="text-xs font-bold text-white tracking-wider uppercase">
-              RailResolve Redressal Gateway
+              {t('heroBadge')}
             </span>
             <span className="text-xs font-semibold text-orange-200">• 24/7 Live Triage</span>
           </div>
@@ -117,26 +162,26 @@ const Home = () => {
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-bold text-primary bg-primary-fixed dark:bg-orange-950 dark:text-orange-200 px-2 py-0.5 rounded-full">
-                      PNR: 2489105839
+                      {t('pnrLabel')}: 2489105839
                     </span>
                     <span className="text-xs font-extrabold text-on-surface dark:text-white">
-                      Ref: RR-8942-VB
+                      {t('refLabel')}: RR-8942-VB
                     </span>
                   </div>
                   <StatusBadge status="IN_PROGRESS" />
                 </div>
                 <p className="text-xs font-bold text-on-surface dark:text-white">
-                  Express Train (20901) • Coach B4, Seat 24
+                  {t('sampleTrainDetails')}
                 </p>
                 <p className="text-xs text-on-surface-variant dark:text-slate-300 mt-1 line-clamp-1 font-medium">
-                  Electrical / AC Cooling: Temperature sensor control issue in Coach B4 compartment.
+                  {t('sampleIssueDesc')}
                 </p>
                 <div className="mt-3 flex items-center justify-between text-[11px] font-bold text-primary">
                   <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px]">schedule</span> SLA Countdown: 12m 45s
+                    <span className="material-symbols-outlined text-[14px]">schedule</span> {t('slaCountdown')} 12m 45s
                   </span>
                   <span className="flex items-center gap-1 hover:underline">
-                    View Live SLA Telemetry &rarr;
+                    {t('viewTelemetry')} &rarr;
                   </span>
                 </div>
               </div>
@@ -147,14 +192,14 @@ const Home = () => {
           {activeTab === 'report' && (
             <div className="w-full max-w-2xl bg-surface-container-lowest/95 dark:bg-slate-900/95 backdrop-blur-2xl p-space-md md:p-space-lg rounded-2xl md:rounded-3xl shadow-2xl border border-white/80 dark:border-slate-700 transition-all text-left">
               <h3 className="text-base font-extrabold text-on-surface dark:text-white mb-1">
-                Lodge On-Board Grievance (Instant Dispatch)
+                {t('lodgeGrievanceTitle')}
               </h3>
               <p className="text-xs text-on-surface-variant dark:text-slate-300 mb-4 font-medium">
-                Provide your journey credentials to alert technical crew &amp; control room.
+                {t('lodgeGrievanceSub')}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                 <div>
-                  <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1">PNR Number / UTS Ticket</label>
+                  <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1">{t('pnrUtsLabel')}</label>
                   <input
                     type="text"
                     placeholder="e.g. 2489105839"
@@ -162,7 +207,7 @@ const Home = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1">Coach &amp; Seat No.</label>
+                  <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1">{t('coachSeatLabel')}</label>
                   <input
                     type="text"
                     placeholder="e.g. Coach B4, Seat 24"
@@ -171,13 +216,13 @@ const Home = () => {
                 </div>
               </div>
               <div className="mb-4">
-                <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1">Select Issue Category</label>
+                <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1">{t('selectCategory')}</label>
                 <select className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-semibold dark:text-white focus:outline-none focus:border-primary">
-                  <option>Coach Cleanliness &amp; Washroom Hygiene</option>
-                  <option>Electrical / AC Temperature Malfunction</option>
-                  <option>Catering / Food Quality &amp; Thermal Seal</option>
-                  <option>Security &amp; RPF Assistance</option>
-                  <option>Medical Emergency on Running Train</option>
+                  <option>{t('cleanlinessTitle')}</option>
+                  <option>{t('electricalTitle')}</option>
+                  <option>{t('cateringTitle')}</option>
+                  <option>{t('securityTitle')}</option>
+                  <option>{t('medicalTitle')}</option>
                 </select>
               </div>
               <button
@@ -185,7 +230,7 @@ const Home = () => {
                 className="w-full bg-primary hover:bg-primary-container text-on-primary font-extrabold text-sm py-3 rounded-2xl shadow-md transition-all flex items-center justify-center gap-2"
               >
                 <span className="material-symbols-outlined text-[18px]">send</span>
-                <span>Proceed to Detailed Report &rarr;</span>
+                <span>{t('proceedReport')} &rarr;</span>
               </button>
             </div>
           )}
@@ -202,7 +247,7 @@ const Home = () => {
             <div>
               <p className="text-2xl font-black text-on-surface dark:text-white tracking-tight">102 Rakes</p>
               <p className="text-xs font-bold text-on-surface-variant dark:text-slate-400 uppercase tracking-wider">{t('activeFleet')}</p>
-              <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">100% Telemetry Monitored</p>
+              <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">{t('telemetryMonitored')}</p>
             </div>
           </div>
           <div className="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-2xl shadow-xl border border-outline-variant/60 dark:border-slate-800 flex items-center gap-4 transition-colors">
@@ -212,7 +257,7 @@ const Home = () => {
             <div>
               <p className="text-2xl font-black text-on-surface dark:text-white tracking-tight">18.4 Mins</p>
               <p className="text-xs font-bold text-on-surface-variant dark:text-slate-400 uppercase tracking-wider">{t('avgResolution')}</p>
-              <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">&darr; 4.2 mins improvement</p>
+              <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">{t('slaImprovement')}</p>
             </div>
           </div>
           <div className="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-2xl shadow-xl border border-outline-variant/60 dark:border-slate-800 flex items-center gap-4 transition-colors">
@@ -222,7 +267,7 @@ const Home = () => {
             <div>
               <p className="text-2xl font-black text-on-surface dark:text-white tracking-tight">96.8%</p>
               <p className="text-xs font-bold text-on-surface-variant dark:text-slate-400 uppercase tracking-wider">{t('satisfactionIndex')}</p>
-              <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">1.4M+ Grievances Resolved</p>
+              <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">{t('grievancesResolved')}</p>
             </div>
           </div>
         </div>
@@ -235,52 +280,15 @@ const Home = () => {
             Category Services
           </span>
           <h2 className="text-2xl md:text-4xl font-extrabold text-on-surface dark:text-white tracking-tight mt-2">
-            High-Speed Redressal Assistance
+            {t('categoryTitle')}
           </h2>
           <p className="text-sm text-on-surface-variant dark:text-slate-300 font-medium mt-2">
-            Select a category to lodge a priority grievance directly linked to your train coach telemetry.
+            {t('categorySub')}
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[
-            {
-              icon: "cleaning_services",
-              title: "Coach Cleanliness & Hygiene",
-              desc: "Request housekeeping crew for washroom sanitization, aisle sweep, or trash clearance.",
-              cat: "cleanliness"
-            },
-            {
-              icon: "ac_unit",
-              title: "Electrical & AC Cooling",
-              desc: "Report air conditioning temperature variations, charging socket faults, or berth lighting issues.",
-              cat: "electrical"
-            },
-            {
-              icon: "restaurant",
-              title: "Catering & Meal Quality",
-              desc: "Lodge queries regarding meal quality, thermal package seal, beverage service, or pricing.",
-              cat: "catering"
-            },
-            {
-              icon: "shield",
-              title: "Security & RPF Protection",
-              desc: "Instant alert to RPF personnel on running train for unauthorized entry or passenger safety.",
-              cat: "security"
-            },
-            {
-              icon: "medical_services",
-              title: "Medical Emergency SOS",
-              desc: "Request emergency doctor or first-aid kit dispatch to berth at the next upcoming junction.",
-              cat: "medical"
-            },
-            {
-              icon: "chair",
-              title: "Berth & Seat Amenities",
-              desc: "Report defective linen, damaged tray tables, window blind faults, or recliner mechanism.",
-              cat: "amenities"
-            }
-          ].map((item, idx) => (
+          {categories.map((item, idx) => (
             <div
               key={idx}
               onClick={() => navigate(`/report?category=${item.cat}`)}
@@ -290,13 +298,13 @@ const Home = () => {
                 <span className="material-symbols-outlined text-[26px]">{item.icon}</span>
               </div>
               <h3 className="text-base font-extrabold text-on-surface dark:text-white group-hover:text-primary transition-colors">
-                {item.title}
+                {t(item.titleKey)}
               </h3>
               <p className="text-xs text-on-surface-variant dark:text-slate-300 font-medium mt-2 leading-relaxed">
-                {item.desc}
+                {t(item.descKey)}
               </p>
               <div className="mt-4 flex items-center text-xs font-bold text-primary gap-1 group-hover:translate-x-1 transition-transform">
-                <span>File Report</span>
+                <span>{t('fileReport')}</span>
                 <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
               </div>
             </div>
@@ -310,14 +318,14 @@ const Home = () => {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
             <div>
               <span className="bg-surface-container-lowest dark:bg-slate-800 text-primary text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-outline-variant dark:border-slate-700">
-                Resolution Matrix
+                {t('resolutionMatrix')}
               </span>
               <h2 className="text-2xl md:text-3xl font-extrabold text-on-surface dark:text-white tracking-tight mt-2">
                 {t('citizenCharterTitle')}
               </h2>
             </div>
             <p className="text-xs text-on-surface-variant dark:text-slate-300 font-medium max-w-md">
-              Indian Railways mandates strict SLA timeframes for operations. Escalations trigger automatically if time limits pass.
+              {t('charterSub')}
             </p>
           </div>
 
@@ -326,43 +334,43 @@ const Home = () => {
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
                   <tr className="bg-surface-container dark:bg-slate-700 border-b border-outline-variant dark:border-slate-600 text-on-surface dark:text-white font-extrabold">
-                    <th className="p-4">Category</th>
-                    <th className="p-4">Primary Responder</th>
-                    <th className="p-4">Target SLA</th>
-                    <th className="p-4">Escalation Tier</th>
-                    <th className="p-4">Mode of Resolution</th>
+                    <th className="p-4">{t('categoryCol')}</th>
+                    <th className="p-4">{t('responderCol')}</th>
+                    <th className="p-4">{t('targetSlaCol')}</th>
+                    <th className="p-4">{t('escalationCol')}</th>
+                    <th className="p-4">{t('resolutionModeCol')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-outline-variant/40 dark:divide-slate-700 font-semibold text-on-surface-variant dark:text-slate-300">
                   <tr>
                     <td className="p-4 font-bold text-on-surface dark:text-white flex items-center gap-2">
                       <span className="material-symbols-outlined text-primary text-[18px]">medical_services</span>
-                      Medical Emergency
+                      {t('medicalEmergency')}
                     </td>
-                    <td className="p-4">Train Captain &amp; Next Junction Medical Unit</td>
-                    <td className="p-4 text-error font-extrabold">Immediate (&lt; 10 Mins)</td>
-                    <td className="p-4">Divisional Medical Officer</td>
-                    <td className="p-4">Berth Side Inspection</td>
+                    <td className="p-4">{t('medicalResponder')}</td>
+                    <td className="p-4 text-error font-extrabold">{t('medicalTarget')}</td>
+                    <td className="p-4">{t('medicalEscalation')}</td>
+                    <td className="p-4">{t('medicalMode')}</td>
                   </tr>
                   <tr>
                     <td className="p-4 font-bold text-on-surface dark:text-white flex items-center gap-2">
                       <span className="material-symbols-outlined text-primary text-[18px]">ac_unit</span>
-                      HVAC / AC Malfunction
+                      {t('hvacMalfunction')}
                     </td>
-                    <td className="p-4">On-Board Electrical Staff</td>
-                    <td className="p-4 text-orange-600 font-extrabold">15 Minutes</td>
-                    <td className="p-4">Divisional Electrical Engineer</td>
-                    <td className="p-4">Compressor Bypass &amp; Sensor Calibration</td>
+                    <td className="p-4">{t('hvacResponder')}</td>
+                    <td className="p-4 text-orange-600 font-extrabold">{t('hvacTarget')}</td>
+                    <td className="p-4">{t('hvacEscalation')}</td>
+                    <td className="p-4">{t('hvacMode')}</td>
                   </tr>
                   <tr>
                     <td className="p-4 font-bold text-on-surface dark:text-white flex items-center gap-2">
                       <span className="material-symbols-outlined text-primary text-[18px]">cleaning_services</span>
-                      Coach Hygiene &amp; Washroom
+                      {t('coachHygiene')}
                     </td>
-                    <td className="p-4">Cleaning Supervisor</td>
-                    <td className="p-4 text-amber-600 font-extrabold">20 Minutes</td>
-                    <td className="p-4">Clean Train Station (CTS)</td>
-                    <td className="p-4">High-Pressure Jet Wash</td>
+                    <td className="p-4">{t('coachResponder')}</td>
+                    <td className="p-4 text-amber-600 font-extrabold">{t('coachTarget')}</td>
+                    <td className="p-4">{t('coachEscalation')}</td>
+                    <td className="p-4">{t('coachMode')}</td>
                   </tr>
                 </tbody>
               </table>
@@ -378,38 +386,25 @@ const Home = () => {
             {t('faqsTitle')}
           </h2>
           <p className="text-xs text-on-surface-variant dark:text-slate-300 font-medium mt-2">
-            Everything you need to know about lodging and tracking complaints on RailResolve.
+            {t('faqsSub')}
           </p>
         </div>
 
         <div className="space-y-4">
-          {[
-            {
-              q: "How does RailResolve track my berth location on a running train?",
-              a: "RailResolve integrates with PNR database to automatically map your seat, coach, and train speed via telemetry."
-            },
-            {
-              q: "What happens if my complaint is not resolved within the target SLA?",
-              a: "If the target SLA timer expires, the ticket is automatically escalated to the Admin Control Room."
-            },
-            {
-              q: "Can I communicate directly with the onboard train captain?",
-              a: "Yes! Every active complaint opens a real-time live chat session with the assigned onboard crew."
-            }
-          ].map((item, idx) => (
+          {faqs.map((item, idx) => (
             <div key={idx} className="bg-surface-container-lowest dark:bg-slate-900 border border-outline-variant/60 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
               <button
                 onClick={() => toggleFaq(idx)}
                 className="w-full p-4 text-left font-bold text-sm text-on-surface dark:text-white flex items-center justify-between hover:bg-surface-container-low dark:hover:bg-slate-800 transition-colors"
               >
-                <span>{item.q}</span>
+                <span>{t(item.qKey)}</span>
                 <span className="material-symbols-outlined text-outline">
                   {faqOpen[idx] ? 'expand_less' : 'expand_more'}
                 </span>
               </button>
               {faqOpen[idx] && (
                 <div className="px-4 pb-4 pt-1 text-xs text-on-surface-variant dark:text-slate-300 font-medium leading-relaxed border-t border-outline-variant/40 dark:border-slate-800">
-                  {item.a}
+                  {t(item.aKey)}
                 </div>
               )}
             </div>

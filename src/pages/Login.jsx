@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import heroTrainImg from '../assets/hero-train.jpg';
 
 const Login = () => {
   const [authMode, setAuthMode] = useState('signin'); // 'signin' | 'signup'
@@ -67,24 +68,36 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
+    <div className="w-full max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
       {/* Main Dual Split Card Portal */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 rounded-3xl overflow-hidden shadow-2xl bg-surface-container-lowest dark:bg-slate-900 border border-outline-variant/60 dark:border-slate-800 hover:border-outline-variant dark:hover:border-slate-700 transition-all">
+      <div className="grid grid-cols-1 lg:grid-cols-12 rounded-3xl overflow-hidden shadow-2xl bg-surface-container-lowest dark:bg-slate-900 border border-outline-variant/60 dark:border-slate-400 hover:border-outline-variant dark:hover:border-slate-700 transition-all">
         
-        {/* LEFT COLUMN: Hero Banner */}
-        <div className="lg:col-span-5 bg-on-surface text-surface p-8 lg:p-10 flex flex-col justify-between relative overflow-hidden">
-          <img
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBuzdqVeaFVfsx8Q2opLsOpsmstv2AkHk6hnh5C2s8G6rV5PCHQlsGhwfwg3KEJQ4xVEqMBr12zxa-QO0gsnN5pCccqoJAuZt_QqlgBbu4Z3XdyR6T95kiajhMIoTU8RsW6x_nSrQDmMH5e163WK9VBZQsaEUPLhEyEZu-4uTrkafh2RAyKPLDlqpugNedLp-PRf-CseR7sAA-aBPDBDQUEuc5ah9ldD0b71RydyDB8zQNDonnsMp1"
-            alt="RailResolve Express Locomotive"
-            className="absolute inset-0 w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-slate-950/30"></div>
-          <div className="relative z-10 flex flex-col justify-between h-full min-h-[460px]">
-            <div className="pt-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md border border-orange-500/30 text-orange-400 text-xs font-mono font-bold mb-6">
-                <span className="w-2 h-2 rounded-full bg-orange-500 animate-ping"></span>
-                <span>RailResolve Portal</span>
-              </div>
+        {/* LEFT COLUMN: Hero Banner with Cinematic Motion */}
+        <div className="lg:col-span-5 bg-on-surface text-surface p-8 lg:p-10 flex flex-col justify-between relative overflow-hidden group">
+          {/* Layered Motion Container */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {/* Background Parallax & Scenery Blur Layer */}
+            <img
+              src={heroTrainImg}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover object-center scale-105 blur-[2px] opacity-35 cinematic-bg-drift"
+            />
+            {/* Main Train Image with Micro-Rumble & Track Tracking */}
+            <img
+              src={heroTrainImg}
+              alt="Vande Bharat Express Locomotive"
+              className="absolute inset-0 w-full h-full object-cover object-center cinematic-train-motion"
+            />
+            {/* Cinematic Speed Light Shimmer */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent cinematic-speed-shimmer"></div>
+            {/* Dark Vignette Overlay for Text Legibility */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-slate-950/30 z-10"></div>
+          </div>
+
+          {/* Static Hero Heading & Description */}
+          <div className="relative z-20 flex flex-col justify-start h-full min-h-[460px]">
+            <div className="pt-2">
               <h1 className="text-3xl lg:text-4xl font-extrabold text-white leading-tight tracking-tight drop-shadow-md">
                 {t('nextGenTitle')}<br />
                 <span className="text-orange-400">{t('nextGenHighlight')}</span>
@@ -92,15 +105,6 @@ const Login = () => {
               <p className="text-slate-300 text-sm mt-3 max-w-xs leading-relaxed font-medium">
                 {t('nextGenSub')}
               </p>
-            </div>
-            <div className="pt-8">
-              <div className="backdrop-blur-md bg-slate-950/70 border border-slate-800/80 rounded-2xl p-3.5 flex items-center justify-between text-xs text-slate-300 font-mono shadow-xl hover:border-orange-500/40 transition-colors">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span className="text-white font-bold">{t('gridTelemetry')}</span>
-                </div>
-                <span className="text-orange-400 font-semibold">{t('avgSla')}</span>
-              </div>
             </div>
           </div>
         </div>

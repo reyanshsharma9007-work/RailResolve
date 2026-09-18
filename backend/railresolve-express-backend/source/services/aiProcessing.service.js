@@ -20,13 +20,26 @@ async function requestComplaintAnalysis(complaint) {
   const startedAt = Date.now();
 
   try {
+    // The complaint document stores trainId (an ObjectId), not trainNumber.
+    // Resolve it here so the model receives the real number as context
+    // instead of always null.
+    let trainNumber = null;
+    try {
+      if (complaint.trainId) {
+        await complaint.populate('trainId', 'trainNumber trainName');
+        trainNumber = complaint.trainId?.trainNumber || null;
+      }
+    } catch (populateErr) {
+      logger.warn(`Could not resolve train number for complaint ${complaint._id}: ${populateErr.message}`);
+    }
+
     const response = await axios.post(
       `${env.FASTAPI_URL}/internal/complaints/process`,
       {
         complaintId: String(complaint._id),
         title: complaint.title,
         description: complaint.description,
-        trainNumber: complaint.trainNumber || null,
+        trainNumber,
         coach: complaint.coach || null,
         seat: complaint.seat || null,
       },
@@ -38,7 +51,8 @@ async function requestComplaintAnalysis(complaint) {
         timeout: env.FASTAPI_REQUEST_TIMEOUT_MS,
       }
     );
-      // FastAPI's fail-safe contract returns HTTP 200 even when the LLM
+
+    // FastAPI's fail-safe contract returns HTTP 200 even when the LLM
     // call failed (success: false, analysis: null) — it never throws a
     // non-2xx for an AI failure. So a 2xx response here does NOT
     // guarantee `analysis` is populated; we must check `success`
@@ -82,7 +96,7 @@ async function requestComplaintAnalysis(complaint) {
     );
 
     logger.info(`AI analysis succeeded for complaint ${complaint._id}`);
-    
+
   } catch (err) {
     // Decoupled failure: log server-side, persist a FAILED record the UI
     // can render as "AI Analysis Unavailable," and stop. The core

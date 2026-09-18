@@ -1,9 +1,9 @@
 // source/database/seed.js
 // One-shot seed script: run with `npm run seed`. Populates the fixed
-// department list, demo trains/stations, default SLA rules, and a single
-// bootstrap ADMIN account. Idempotent — safe to run multiple times
-// (uses upserts / findOrCreate patterns), per PRD 2.2's "simulated via
-// seed data" requirement for train/station master data.
+// department list, demo trains/stations, default SLA rules, a bootstrap
+// ADMIN account, and a starter set of staff accounts so the assignment
+// flow is testable immediately after a fresh install. Idempotent — safe
+// to run multiple times.
 
 require('dotenv').config();
 const mongoose = require('mongoose');
@@ -45,6 +45,20 @@ const STATIONS_SEED = [
   { code: 'BPL', name: 'Bhopal Junction' },
 ];
 
+// One officer per department plus a senior authority, so a freshly seeded
+// database can already demonstrate assign -> acknowledge -> resolve.
+// Every one of these can equally be created from the admin UI at runtime.
+const STAFF_SEED = [
+  { name: 'Ticket Officer', email: 'officer.ticket@railresolve.local', role: ROLES.OFFICER, departmentCode: DEPARTMENT_CODES.TICKET_TTE },
+  { name: 'Station Maintenance Officer', email: 'officer.station@railresolve.local', role: ROLES.OFFICER, departmentCode: DEPARTMENT_CODES.STATION_MAINTENANCE },
+  { name: 'Train Maintenance Officer', email: 'officer.train@railresolve.local', role: ROLES.OFFICER, departmentCode: DEPARTMENT_CODES.TRAIN_MAINTENANCE },
+  { name: 'Food & Water Officer', email: 'officer.food@railresolve.local', role: ROLES.OFFICER, departmentCode: DEPARTMENT_CODES.FOOD_WATER },
+  { name: 'Operations Officer', email: 'officer.ops@railresolve.local', role: ROLES.OFFICER, departmentCode: DEPARTMENT_CODES.TRAIN_OPERATIONS },
+  { name: 'Booking & Refund Officer', email: 'officer.booking@railresolve.local', role: ROLES.OFFICER, departmentCode: DEPARTMENT_CODES.BOOKING_REFUND },
+  { name: 'General Support Officer', email: 'officer.support@railresolve.local', role: ROLES.OFFICER, departmentCode: DEPARTMENT_CODES.GENERAL_SUPPORT },
+  { name: 'Senior Authority', email: 'authority@railresolve.local', role: ROLES.SENIOR_AUTHORITY, departmentCode: null },
+];
+
 async function seedDepartments() {
   for (const dept of DEPARTMENTS_SEED) {
     await Department.findOneAndUpdate({ code: dept.code }, dept, { upsert: true, new: true });
@@ -78,7 +92,7 @@ async function seedSlaRules() {
 }
 
 async function seedAdminUser() {
-  const adminEmail = process.env.SEED_ADMIN_EMAIL || 'admin@railresolve.local';
+  const adminEmail = (process.env.SEED_ADMIN_EMAIL || 'admin@railresolve.local').toLowerCase();
   const existing = await User.findOne({ email: adminEmail });
   if (existing) {
     logger.info(`Admin user already exists (${adminEmail}), skipping`);
@@ -98,6 +112,38 @@ async function seedAdminUser() {
   logger.info(`Seeded admin user: ${adminEmail} (password: ${adminPassword}) — CHANGE THIS IN PRODUCTION`);
 }
 
+async function seedStaffUsers() {
+  const staffPassword = process.env.SEED_STAFF_PASSWORD || 'StaffPass123!';
+  let created = 0;
+
+  for (const staff of STAFF_SEED) {
+    const email = staff.email.toLowerCase();
+    const existing = await User.findOne({ email });
+    if (existing) continue;
+
+    let departmentId = null;
+    if (staff.departmentCode) {
+      const department = await Department.findOne({ code: staff.departmentCode });
+      if (!department) {
+        logger.warn(`Department ${staff.departmentCode} missing, skipping ${email}`);
+        continue;
+      }
+      departmentId = department._id;
+    }
+
+    await User.create({
+      name: staff.name,
+      email,
+      passwordHash: await User.hashPassword(staffPassword),
+      role: staff.role,
+      departmentId,
+    });
+    created += 1;
+  }
+
+  logger.info(`Seeded ${created} staff account(s) (shared password: ${staffPassword}) — CHANGE THESE IN PRODUCTION`);
+}
+
 async function seed() {
   await connectDatabase();
   try {
@@ -106,6 +152,7 @@ async function seed() {
     await seedStations();
     await seedSlaRules();
     await seedAdminUser();
+    await seedStaffUsers();
     logger.info('Seeding completed successfully');
   } catch (err) {
     logger.error(`Seeding failed: ${err.message}`, { stack: err.stack });

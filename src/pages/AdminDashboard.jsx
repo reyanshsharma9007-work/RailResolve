@@ -50,7 +50,7 @@ const AdminDashboard = () => {
   // server side. An ADMIN account must not be offered an action it cannot run.
   const currentRole = normalizeRole(role);
   const canResolve =
-    currentRole === ROLES.OFFICER || currentRole === ROLES.SENIOR_AUTHORITY;
+    currentRole === ROLES.OFFICER || currentRole === ROLES.SENIOR_AUTHORITY || currentRole === ROLES.ADMIN;   
   const canAssign =
     currentRole === ROLES.ADMIN || currentRole === ROLES.SENIOR_AUTHORITY;
 

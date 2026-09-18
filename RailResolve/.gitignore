@@ -1,0 +1,25 @@
+# ===== Environment files (never commit real secrets) =====
+.env
+**/.env
+
+# ===== Node / Express =====
+node_modules/
+**/node_modules/
+npm-debug.log*
+*.log
+
+# ===== Python / FastAPI =====
+__pycache__/
+**/__pycache__/
+*.pyc
+.venv/
+**/.venv/
+venv/
+**/venv/
+*.egg-info/
+.pytest_cache/
+
+# ===== OS / Editor =====
+.DS_Store
+.vscode/*
+!.vscode/settings.json

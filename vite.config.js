@@ -10,7 +10,9 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
+    // Must match CLIENT_ORIGIN in railresolve-express-backend/.env,
+    // otherwise the Express CORS layer rejects every request.
+    port: 5173,
     open: true,
   },
 });

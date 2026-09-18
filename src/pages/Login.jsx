@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import { homeRouteForRole, ROLES } from '../constants/roles';
 import heroTrainImg from '../assets/hero-train.jpg';
 
 const Login = () => {
   const [authMode, setAuthMode] = useState('signin'); // 'signin' | 'signup'
-  const [selectedRole, setSelectedRole] = useState('passenger'); // 'passenger' | 'admin'
+  // Presentation only. The backend's authenticated role decides where the
+  // user actually lands and what they can do — selecting Admin here grants
+  // nothing.
+  const [selectedRole, setSelectedRole] = useState(ROLES.PASSENGER);
 
   // Sign In Form States
   const [signInIdentifier, setSignInIdentifier] = useState('rajesh.kumar@example.com');
@@ -19,51 +23,53 @@ const Login = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const { login, toggleLanguage, language, t } = useAuth();
+  const { login, register, toggleLanguage, language, t } = useAuth();
+  // Non-passenger accounts are provisioned by an administrator, never self-served.
+  const isStaffSelection = selectedRole !== ROLES.PASSENGER;
   const navigate = useNavigate();
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    login(selectedRole, {
-      name: selectedRole === 'admin' ? 'System Admin' : 'Rajesh Kumar',
-      email: selectedRole === 'admin' ? 'admin@railresolve.gov.in' : signInIdentifier,
-      phone: '+91 98765 43210',
-      pnr: selectedRole === 'passenger' ? '2489-1058-39' : 'ADMIN-KEY-991',
-      tier: selectedRole === 'admin' ? 'System Administrator' : 'Verified Passenger',
-      avatar: selectedRole === 'admin'
-        ? 'https://lh3.googleusercontent.com/aida-public/AB6AXuByXgmf2t_ZjweU5On_-g0VjyP_66LFe4L-YDf5OPTOc-24PcROX3ZGxMk1JDmkIFfP65hZ8QTOEMLSbbNFSG1A3rIoNezFM-lSpkcrtAf-SBIILWBxwCCQ41cA5S3Q6P0pOZxrBFKqnABzv6TUpjyc6xP1Z6LPYqNIriAoWLWfoHBluyetuMnqF-kemegnvNFnJIq-30ZeCP1Q4J3ZJXQo2psVy9c3KmSTwgPnSF7Xvt6IjBZyiiwmQBnN6nbxOQPvwQ'
-        : 'https://lh3.googleusercontent.com/aida-public/AB6AXuBikO5Q8O6sJKFRh2TyU_yIecJEbNSt2V5Bhvpfk-LMP2L1BwRgK-t0Tx2j2c8JH4A9rcKSQsKpZS37oFtWFqhFBWCqrJBxHbe_An59ILWQgpEKaTt_yBWGjAPnyLRhHhwCSXRBqTa0tJBLlQ5sJlhWxzZIXIO4WDhS9m2oTjVowIB1kvLZFSHTzi6I1tvbvhX6rcD5EHMY3cMgQeLROo1bXgeyN_5BdsqNByeMAPzXdvRkagVO38Wxjm2-Vj_cdKetmA'
-    });
+    try {
+      const loggedInUser = await login({
+        email: signInIdentifier,
+        password: signInPassword
+      });
 
-    if (selectedRole === 'admin') {
-      navigate('/admin');
-    } else {
-      navigate('/passenger');
+      // The server decides the role — never the role pill on this form.
+      navigate(homeRouteForRole(loggedInUser.role));
+    } catch (error) {
+      console.error('Login failed', error);
+      alert(error.message || 'Login failed. Please check your credentials.');
     }
   };
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
       alert('Passwords do not match');
       return;
     }
+    
+    // Only passengers can register via the frontend.
+    if (isStaffSelection) {
+      alert(t('staffRegistrationBlocked', 'Staff accounts are created by an administrator, not through the public portal.'));
+      return;
+    }
 
-    login(selectedRole, {
-      name: fullName || (selectedRole === 'admin' ? 'System Admin' : 'New Passenger'),
-      email: email || (selectedRole === 'admin' ? 'admin@railresolve.gov.in' : 'passenger@example.com'),
-      phone: phone || '+91 98765 43210',
-      pnr: pnrOrAdminKey || '2489-1058-39',
-      tier: selectedRole === 'admin' ? 'System Administrator' : 'Verified Passenger',
-      avatar: selectedRole === 'admin'
-        ? 'https://lh3.googleusercontent.com/aida-public/AB6AXuByXgmf2t_ZjweU5On_-g0VjyP_66LFe4L-YDf5OPTOc-24PcROX3ZGxMk1JDmkIFfP65hZ8QTOEMLSbbNFSG1A3rIoNezFM-lSpkcrtAf-SBIILWBxwCCQ41cA5S3Q6P0pOZxrBFKqnABzv6TUpjyc6xP1Z6LPYqNIriAoWLWfoHBluyetuMnqF-kemegnvNFnJIq-30ZeCP1Q4J3ZJXQo2psVy9c3KmSTwgPnSF7Xvt6IjBZyiiwmQBnN6nbxOQPvwQ'
-        : 'https://lh3.googleusercontent.com/aida-public/AB6AXuBikO5Q8O6sJKFRh2TyU_yIecJEbNSt2V5Bhvpfk-LMP2L1BwRgK-t0Tx2j2c8JH4A9rcKSQsKpZS37oFtWFqhFBWCqrJBxHbe_An59ILWQgpEKaTt_yBWGjAPnyLRhHhwCSXRBqTa0tJBLlQ5sJlhWxzZIXIO4WDhS9m2oTjVowIB1kvLZFSHTzi6I1tvbvhX6rcD5EHMY3cMgQeLROo1bXgeyN_5BdsqNByeMAPzXdvRkagVO38Wxjm2-Vj_cdKetmA'
-    });
+    try {
+      await register({
+        name: fullName,
+        email: email,
+        phone: phone,
+        pnr: pnrOrAdminKey,
+        password: newPassword
+      });
 
-    if (selectedRole === 'admin') {
-      navigate('/admin');
-    } else {
       navigate('/passenger');
+    } catch (error) {
+      console.error('Registration failed', error);
+      alert(error.message || 'Registration failed. Please try again.');
     }
   };
 
@@ -166,51 +172,49 @@ const Login = () => {
               </div>
             </div>
 
-            {/* ONLY TWO ROLES Selector Pill */}
-            <div className="mb-6 p-1.5 rounded-2xl bg-surface-container-low dark:bg-slate-800 border border-outline-variant/60 dark:border-slate-700 flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setSelectedRole('passenger')}
-                className={`flex-1 py-2.5 rounded-xl font-extrabold text-xs flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:outline-none active:scale-[0.98] ${
-                  selectedRole === 'passenger'
-                    ? 'bg-primary text-on-primary shadow-md'
-                    : 'text-on-surface-variant dark:text-slate-300 hover:text-on-surface dark:hover:text-white hover:bg-surface-container/60 dark:hover:bg-slate-700/60'
-                }`}
-              >
-                <span className="material-symbols-outlined text-[18px]">person</span>
-                <span>{t('passengerCitizen')}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedRole('admin')}
-                className={`flex-1 py-2.5 rounded-xl font-extrabold text-xs flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:outline-none active:scale-[0.98] ${
-                  selectedRole === 'admin'
-                    ? 'bg-primary text-on-primary shadow-md'
-                    : 'text-on-surface-variant dark:text-slate-300 hover:text-on-surface dark:hover:text-white hover:bg-surface-container/60 dark:hover:bg-slate-700/60'
-                }`}
-              >
-                <span className="material-symbols-outlined text-[18px]">admin_panel_settings</span>
-                <span>{t('admin')}</span>
-              </button>
+            {/* Role selector — four roles, matching the backend ROLES enum.
+                This is a presentation hint only: the server's authenticated
+                role decides the destination and the permissions. */}
+            <div className="mb-6 p-1.5 rounded-2xl bg-surface-container-low dark:bg-slate-800 border border-outline-variant/60 dark:border-slate-700 grid grid-cols-2 lg:grid-cols-4 gap-2">
+              {[
+                { value: ROLES.PASSENGER, icon: 'person', labelKey: 'rolePassenger', fallback: 'Passenger (Citizen)' },
+                { value: ROLES.OFFICER, icon: 'engineering', labelKey: 'roleOfficer', fallback: 'Officer' },
+                { value: ROLES.SENIOR_AUTHORITY, icon: 'gavel', labelKey: 'roleSeniorAuthority', fallback: 'Senior Authority' },
+                { value: ROLES.ADMIN, icon: 'admin_panel_settings', labelKey: 'roleAdmin', fallback: 'Admin' },
+              ].map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => setSelectedRole(option.value)}
+                  className={`py-2.5 px-2 rounded-xl font-extrabold text-[11px] flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:outline-none active:scale-[0.98] ${
+                    selectedRole === option.value
+                      ? 'bg-primary text-on-primary shadow-md'
+                      : 'text-on-surface-variant dark:text-slate-300 hover:text-on-surface dark:hover:text-white hover:bg-surface-container/60 dark:hover:bg-slate-700/60'
+                  }`}
+                >
+                  <span className="material-symbols-outlined text-[16px]">{option.icon}</span>
+                  <span className="truncate">{t(option.labelKey, option.fallback)}</span>
+                </button>
+              ))}
             </div>
 
             {/* Form Headline */}
             <div className="mb-6">
               <h2 className="text-xl font-extrabold text-on-surface dark:text-white tracking-tight">
                 {authMode === 'signin'
-                  ? selectedRole === 'admin'
+                  ? isStaffSelection
                     ? t('adminLoginTitle')
                     : t('passengerLoginTitle')
-                  : selectedRole === 'admin'
+                  : isStaffSelection
                   ? t('adminRegisterTitle')
                   : t('passengerRegisterTitle')}
               </h2>
               <p className="text-xs text-on-surface-variant dark:text-slate-400 mt-1">
                 {authMode === 'signin'
-                  ? selectedRole === 'admin'
+                  ? isStaffSelection
                     ? t('adminLoginSub')
                     : t('passengerLoginSub')
-                  : selectedRole === 'admin'
+                  : isStaffSelection
                   ? t('adminRegisterSub')
                   : t('passengerRegisterSub')}
               </p>
@@ -221,18 +225,18 @@ const Login = () => {
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div>
                   <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">
-                    {selectedRole === 'admin' ? t('adminIdentifierLabel') : t('signInIdentifierLabel')}
+                    {isStaffSelection ? t('adminIdentifierLabel') : t('signInIdentifierLabel')}
                   </label>
                   <div className="relative flex items-center bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl px-3.5 py-3 hover:border-primary/50 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
                     <span className="material-symbols-outlined text-outline dark:text-slate-400 text-[20px] mr-2">
-                      {selectedRole === 'admin' ? 'badge' : 'person'}
+                      {isStaffSelection ? 'badge' : 'person'}
                     </span>
                     <input
                       type="text"
                       required
                       value={signInIdentifier}
                       onChange={(e) => setSignInIdentifier(e.target.value)}
-                      placeholder={selectedRole === 'admin' ? 'admin@railresolve.gov.in' : 'rajesh.kumar@example.com'}
+                      placeholder={isStaffSelection ? 'admin@railresolve.gov.in' : 'rajesh.kumar@example.com'}
                       className="w-full bg-transparent border-none outline-none text-xs font-bold text-on-surface dark:text-white placeholder:text-outline"
                     />
                   </div>
@@ -260,7 +264,7 @@ const Login = () => {
                   className="w-full bg-primary hover:bg-primary-container text-on-primary font-extrabold text-sm py-3.5 rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:outline-none transition-all flex items-center justify-center gap-2 mt-4 cursor-pointer"
                 >
                   <span>
-                    {selectedRole === 'admin' ? t('authenticateAdmin') : t('verifyAccess')} &rarr;
+                    {isStaffSelection ? t('authenticateAdmin') : t('verifyAccess')} &rarr;
                   </span>
                 </button>
               </form>
@@ -315,14 +319,14 @@ const Login = () => {
 
                 <div>
                   <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1">
-                    {selectedRole === 'admin' ? t('adminKey') : t('pnrNumber')}
+                    {isStaffSelection ? t('adminKey') : t('pnrNumber')}
                   </label>
                   <input
                     type="text"
-                    required={selectedRole === 'admin'}
+                    required={isStaffSelection}
                     value={pnrOrAdminKey}
                     onChange={(e) => setPnrOrAdminKey(e.target.value)}
-                    placeholder={selectedRole === 'admin' ? 'e.g. ADM-AUTH-9912' : 'e.g. 2489105839 (Optional)'}
+                    placeholder={isStaffSelection ? 'e.g. ADM-AUTH-9912' : 'e.g. 2489105839 (Optional)'}
                     className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-xl px-3.5 py-2.5 text-xs font-bold text-on-surface dark:text-white focus:outline-none transition-all"
                   />
                 </div>
@@ -362,7 +366,7 @@ const Login = () => {
                   className="w-full bg-primary hover:bg-primary-container text-on-primary font-extrabold text-sm py-3.5 rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:outline-none transition-all flex items-center justify-center gap-2 mt-4 cursor-pointer"
                 >
                   <span>
-                    {selectedRole === 'admin' ? t('registerAdmin') : t('registerPassenger')} &rarr;
+                    {isStaffSelection ? t('registerAdmin') : t('registerPassenger')} &rarr;
                   </span>
                 </button>
               </form>

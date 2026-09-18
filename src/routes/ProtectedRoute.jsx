@@ -1,7 +1,18 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import AccessRestricted from '../pages/AccessRestricted';
+import { normalizeRole, homeRouteForRole } from '../constants/roles';
 
+/**
+ * Frontend route gate. This is a usability layer only — the Express backend
+ * remains the real authorization boundary (auth.middleware, rbac.middleware and
+ * ownership.middleware all re-check every request).
+ *
+ * An unauthenticated visitor is sent to /login. An authenticated user who lacks
+ * the role is shown Access Restricted rather than being bounced, which is what
+ * previously caused redirect loops between two routes neither role could enter.
+ */
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { isAuthenticated, role } = useAuth();
 
@@ -9,9 +20,10 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (allowedRoles && !allowedRoles.includes(role)) {
-    // If passenger tries to access admin, redirect to passenger dashboard, and vice versa
-    return <Navigate to={role === 'admin' ? '/admin' : '/passenger'} replace />;
+  const currentRole = normalizeRole(role);
+
+  if (allowedRoles && !allowedRoles.includes(currentRole)) {
+    return <AccessRestricted role={currentRole} homeRoute={homeRouteForRole(currentRole)} />;
   }
 
   return children;

@@ -1,81 +1,108 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import AddJourneyModal from '../components/common/AddJourneyModal';
+import { journeyService } from '../services/journeyService';
+import { referenceService } from '../services/referenceService';
+import { complaintService } from '../services/complaintService';
+import { attachmentService } from '../services/attachmentService';
 
 const ReportComplaint = () => {
   const [searchParams] = useSearchParams();
-  const preCategory = searchParams.get('category') || 'cleanliness';
-  const { addComplaint, user, t } = useAuth();
+  const preJourneyId = searchParams.get('journeyId') || '';
+  const { user, t } = useAuth();
   const navigate = useNavigate();
 
-  const [pnr, setPnr] = useState(user?.pnr || '2489-1058-39');
-  const [trainNo, setTrainNo] = useState('20901');
-  const [coach, setCoach] = useState('B4');
-  const [seat, setSeat] = useState('24 Lower');
-  const [category, setCategory] = useState(
-    preCategory === 'electrical'
-      ? 'Electrical / AC Cooling'
-      : preCategory === 'medical'
-      ? 'Medical Emergency'
-      : preCategory === 'catering'
-      ? 'Catering / Meal Quality'
-      : preCategory === 'security'
-      ? 'Security & RPF Protection'
-      : preCategory === 'amenities'
-      ? 'Berth & Seat Amenities'
-      : 'Coach Cleanliness'
-  );
+  const [journeys, setJourneys] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
+
+  // Form states
+  const [journeyId, setJourneyId] = useState(preJourneyId);
+  const [departmentCode, setDepartmentCode] = useState('');
+  const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState('HIGH');
-  const [photoName, setPhotoName] = useState('');
+  const [photo, setPhoto] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [journeyModalOpen, setJourneyModalOpen] = useState(false);
 
-  const handleSubmit = (e) => {
+  const fetchData = async () => {
+    try {
+      setLoadingData(true);
+      const [journeysRes, deptsRes] = await Promise.all([
+        journeyService.getAll(),
+        referenceService.getDepartments()
+      ]);
+      if (journeysRes.success) setJourneys(journeysRes.data.journeys || []);
+      if (deptsRes.success) setDepartments(deptsRes.data.departments || []);
+    } catch (err) {
+      console.error("Failed to fetch reference data", err);
+      setError("Failed to load required data. Please try again later.");
+    } finally {
+      setLoadingData(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Update category options when department changes
+  const selectedDept = departments.find(d => d.code === departmentCode);
+  const permittedCategories = selectedDept?.permittedCategories || [];
+
+  useEffect(() => {
+    if (permittedCategories.length > 0 && !permittedCategories.includes(category)) {
+      setCategory(permittedCategories[0]);
+    }
+  }, [departmentCode, permittedCategories, category]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newId = `RR-${Math.floor(1000 + Math.random() * 9000)}-VB`;
-    const newComplaintObj = {
-      id: newId,
-      pnr,
-      trainNo,
-      trainName: 'Vande Bharat Express',
-      coach,
-      seat,
-      passengerName: user?.name || 'Rajesh Kumar',
-      passengerPhone: user?.phone || '+91 98765 43210',
-      category,
-      title: title || `${category} Issue reported in Coach ${coach}`,
-      description: description || 'Grievance submitted via RailResolve Web Portal.',
-      priority,
-      status: 'OPEN',
-      slaRemaining: priority === 'HIGH' ? '15m 00s' : '30m 00s',
-      createdAt: new Date().toLocaleString(),
-      assignedTo: 'Automated Triage (Routing to Control Room)',
-      station: 'En-route Telemetry Active',
-      speedTelemetry: '128 km/h',
-      timeline: [
-        {
-          stage: 'Submitted',
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          desc: 'Complaint filed via RailResolve Portal',
-          completed: true,
-          current: true
-        },
-        { stage: 'Automated Triage', time: 'Pending', desc: 'Routing to Divisional Control', completed: false },
-        { stage: 'Staff Assigned', time: 'Pending', desc: 'Awaiting crew dispatch', completed: false },
-        { stage: 'Onboard Action', time: 'Pending', desc: 'On-board inspection', completed: false },
-        { stage: 'Resolved & Closed', time: 'Pending', desc: 'Passenger confirmation', completed: false }
-      ],
-      chatMessages: [
-        {
-          sender: 'system',
-          text: `RailResolve System: Complaint ${newId} logged. Routing to Captain & Triage Team.`,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }
-      ]
-    };
+    if (!journeyId || !departmentCode || !category || !title || !description) {
+      setError("Please fill all required fields.");
+      return;
+    }
 
-    addComplaint(newComplaintObj);
-    navigate(`/track?id=${newId}`);
+    try {
+      setSubmitting(true);
+      setError(null);
+      const incidentDateTime = new Date().toISOString();
+
+      const payload = {
+        journeyId,
+        departmentCode,
+        category,
+        title,
+        description,
+        incidentDateTime
+      };
+
+      const res = await complaintService.create(payload);
+      
+      if (res.success) {
+        const complaintId = res.data.complaint._id || res.data.complaint.id;
+        
+        // If there is an attachment, upload it
+        if (photo) {
+          try {
+            await attachmentService.upload(complaintId, photo);
+          } catch (uploadErr) {
+            console.error("Failed to upload attachment", uploadErr);
+            // Optionally notify user that complaint was created but attachment failed
+          }
+        }
+        
+        navigate(`/track?id=${complaintId}`);
+      }
+    } catch (err) {
+      console.error("Failed to create complaint", err);
+      setError(err.message || "Failed to submit grievance. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -94,112 +121,112 @@ const ReportComplaint = () => {
         </p>
       </div>
 
-      {/* Main Form */}
-      <form onSubmit={handleSubmit} className="bg-surface-container-lowest dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-lg space-y-6 transition-colors">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">{t('pnrUtsLabel')}</label>
-            <input
-              type="text"
-              required
-              value={pnr}
-              onChange={(e) => setPnr(e.target.value)}
-              placeholder="e.g. 2489105839"
-              className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl px-4 py-3 text-xs font-bold text-on-surface dark:text-white focus:outline-none focus:border-primary transition-all"
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">{t('trainNoLabel')}</label>
-            <input
-              type="text"
-              required
-              value={trainNo}
-              onChange={(e) => setTrainNo(e.target.value)}
-              placeholder="e.g. 20901 Vande Bharat Express"
-              className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl px-4 py-3 text-xs font-bold text-on-surface dark:text-white focus:outline-none focus:border-primary transition-all"
-            />
-          </div>
+      {loadingData ? (
+        <div className="text-center py-10">
+          <span className="material-symbols-outlined animate-spin text-4xl text-primary mb-4">refresh</span>
+          <p className="text-on-surface dark:text-white font-bold text-sm">Loading form data...</p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">{t('coachNoLabel')}</label>
-            <input
-              type="text"
-              required
-              value={coach}
-              onChange={(e) => setCoach(e.target.value)}
-              placeholder="e.g. B4"
-              className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl px-4 py-3 text-xs font-bold text-on-surface dark:text-white focus:outline-none focus:border-primary transition-all"
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">{t('seatNoLabel')}</label>
-            <input
-              type="text"
-              required
-              value={seat}
-              onChange={(e) => setSeat(e.target.value)}
-              placeholder="e.g. 24 Lower"
-              className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl px-4 py-3 text-xs font-bold text-on-surface dark:text-white focus:outline-none focus:border-primary transition-all"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">{t('categoryLabel')}</label>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl px-4 py-3 text-xs font-bold text-on-surface dark:text-white focus:outline-none focus:border-primary transition-all"
+      ) : journeys.length === 0 ? (
+        /* A complaint is always filed against a journey the passenger owns, so
+           explain the blocker rather than silently disabling the form. */
+        <div className="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-lg text-center transition-colors">
+          <span className="material-symbols-outlined text-4xl text-primary mb-3">train</span>
+          <h2 className="text-base font-extrabold text-on-surface dark:text-white mb-2">
+            No journey found. Add a journey to report a grievance.
+          </h2>
+          <p className="text-xs text-on-surface-variant dark:text-slate-400 font-medium mb-5 max-w-md mx-auto">
+            Every grievance is linked to one of your journeys, so we can route it to the right
+            department and track it against your travel record.
+          </p>
+          <button
+            type="button"
+            onClick={() => setJourneyModalOpen(true)}
+            className="px-6 py-3 rounded-2xl bg-primary hover:bg-primary-container text-on-primary font-extrabold text-xs shadow-md active:scale-95 transition-all inline-flex items-center gap-2 cursor-pointer"
           >
-            <option value="Coach Cleanliness">{t('cleanlinessTitle')}</option>
-            <option value="Electrical / AC Cooling">{t('electricalTitle')}</option>
-            <option value="Catering / Meal Quality">{t('cateringTitle')}</option>
-            <option value="Security & RPF Protection">{t('securityTitle')}</option>
-            <option value="Medical Emergency">{t('medicalTitle')}</option>
-            <option value="Berth & Seat Amenities">{t('amenitiesTitle')}</option>
-          </select>
+            <span className="material-symbols-outlined text-[18px]">add_circle</span>
+            <span>{t('addJourneyBtn', 'Add Journey')}</span>
+          </button>
         </div>
-
-        <div>
-          <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">{t('issueHeadlineLabel')}</label>
-          <input
-            type="text"
-            required
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g. AC unit blowing warm air above berth 24"
-            className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl px-4 py-3 text-xs font-bold text-on-surface dark:text-white focus:outline-none focus:border-primary transition-all"
-          />
-        </div>
-
-        <div>
-          <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">{t('detailedDescLabel')}</label>
-          <textarea
-            rows="4"
-            required
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder={t('detailedDescPlaceholder')}
-            className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl p-4 text-xs font-semibold text-on-surface dark:text-white focus:outline-none focus:border-primary transition-all"
-          ></textarea>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      ) : (
+        <form onSubmit={handleSubmit} className="bg-surface-container-lowest dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-lg space-y-6 transition-colors">
+          {error && (
+            <div className="bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 p-4 rounded-xl text-sm font-bold">
+              {error}
+            </div>
+          )}
+          
           <div>
-            <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">{t('urgencyLabel')}</label>
+            <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">Select Journey</label>
             <select
-              value={priority}
-              onChange={(e) => setPriority(e.target.value)}
+              required
+              value={journeyId}
+              onChange={(e) => setJourneyId(e.target.value)}
               className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl px-4 py-3 text-xs font-bold text-on-surface dark:text-white focus:outline-none focus:border-primary transition-all"
             >
-              <option value="HIGH">{t('priorityHigh')} (15 Mins)</option>
-              <option value="MEDIUM">{t('priorityMedium')} (30 Mins)</option>
-              <option value="LOW">{t('priorityLow')} (45 Mins)</option>
+              <option value="">Select a journey</option>
+              {journeys.map(j => (
+                <option key={j._id} value={j._id}>
+                  {new Date(j.travelDate).toLocaleDateString()} - {j.trainId?.trainName} ({j.boardingStationId?.code} to {j.destinationStationId?.code})
+                </option>
+              ))}
             </select>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">Department</label>
+              <select
+                required
+                value={departmentCode}
+                onChange={(e) => setDepartmentCode(e.target.value)}
+                className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl px-4 py-3 text-xs font-bold text-on-surface dark:text-white focus:outline-none focus:border-primary transition-all"
+              >
+                <option value="">Select Department</option>
+                {departments.map(d => (
+                  <option key={d.code} value={d.code}>{d.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">{t('categoryLabel')}</label>
+              <select
+                required
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                disabled={!departmentCode || permittedCategories.length === 0}
+                className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl px-4 py-3 text-xs font-bold text-on-surface dark:text-white focus:outline-none focus:border-primary transition-all disabled:opacity-50"
+              >
+                <option value="">Select Category</option>
+                {permittedCategories.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">{t('issueHeadlineLabel')}</label>
+            <input
+              type="text"
+              required
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="e.g. AC unit blowing warm air above berth 24"
+              className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl px-4 py-3 text-xs font-bold text-on-surface dark:text-white focus:outline-none focus:border-primary transition-all"
+            />
+          </div>
+
+          <div>
+            <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">{t('detailedDescLabel')}</label>
+            <textarea
+              rows="4"
+              required
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder={t('detailedDescPlaceholder')}
+              className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl p-4 text-xs font-semibold text-on-surface dark:text-white focus:outline-none focus:border-primary transition-all"
+            ></textarea>
           </div>
 
           <div>
@@ -207,26 +234,43 @@ const ReportComplaint = () => {
             <div className="relative flex items-center bg-surface-container-low dark:bg-slate-800 border border-dashed border-outline dark:border-slate-700 rounded-2xl px-4 py-2.5 cursor-pointer hover:bg-surface-container dark:hover:bg-slate-750 transition-colors">
               <span className="material-symbols-outlined text-outline dark:text-slate-400 text-[20px] mr-2">cloud_upload</span>
               <span className="text-xs font-bold text-on-surface-variant dark:text-slate-300 truncate">
-                {photoName || t('photoPlaceholder')}
+                {photo ? photo.name : t('photoPlaceholder')}
               </span>
               <input
                 type="file"
-                accept="image/*"
-                onChange={(e) => setPhotoName(e.target.files[0]?.name || '')}
+                accept="image/jpeg,image/png,application/pdf"
+                onChange={(e) => setPhoto(e.target.files[0] || null)}
                 className="absolute inset-0 opacity-0 cursor-pointer"
               />
             </div>
           </div>
-        </div>
 
-        <button
-          type="submit"
-          className="w-full bg-primary hover:bg-primary-container text-on-primary font-extrabold text-sm py-4 rounded-2xl shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
-        >
-          <span className="material-symbols-outlined text-[20px]">send</span>
-          <span>{t('submitGrievanceBtn')} &rarr;</span>
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full bg-primary hover:bg-primary-container disabled:opacity-50 text-on-primary font-extrabold text-sm py-4 rounded-2xl shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            {submitting ? (
+              <span className="material-symbols-outlined animate-spin text-[20px]">refresh</span>
+            ) : (
+              <span className="material-symbols-outlined text-[20px]">send</span>
+            )}
+            <span>{submitting ? 'Submitting...' : t('submitGrievanceBtn') + ' \u2192'}</span>
+          </button>
+        </form>
+      )}
+
+      <AddJourneyModal
+        isOpen={journeyModalOpen}
+        onClose={() => setJourneyModalOpen(false)}
+        onCreated={(journey) => {
+          setJourneyModalOpen(false);
+          // Preselect the journey that was just created, then refresh so the
+          // dropdown label carries the populated train/station names.
+          setJourneyId(journey._id);
+          fetchData();
+        }}
+      />
     </div>
   );
 };

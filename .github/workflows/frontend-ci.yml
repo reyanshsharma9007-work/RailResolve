@@ -3,11 +3,11 @@ name: Frontend CI
 on:
   push:
     branches:
-      - vijay
+      - main
 
   pull_request:
     branches:
-      - vijay
+      - main
 
 jobs:
   frontend-build:

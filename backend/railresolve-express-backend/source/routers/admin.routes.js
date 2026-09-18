@@ -13,14 +13,21 @@ const router = express.Router();
 
 router.use(authenticate);
 
+// ----- User / staff management -----
 router.get('/users', requireRole(ROLES.ADMIN), adminController.listUsers);
+// Creates OFFICER / SENIOR_AUTHORITY / ADMIN accounts. The only way a
+// non-passenger account comes into existence besides the seed script.
+router.post('/users', requireRole(ROLES.ADMIN), adminController.createUser);
 router.patch('/users/:id/role', requireRole(ROLES.ADMIN), adminController.updateUserRole);
 router.patch('/users/:id/deactivate', requireRole(ROLES.ADMIN), adminController.deactivateUser);
+router.patch('/users/:id/activate', requireRole(ROLES.ADMIN), adminController.activateUser);
+router.patch('/users/:id/password', requireRole(ROLES.ADMIN), adminController.resetUserPassword);
 
+// ----- Oversight -----
 router.get('/audit-logs', requireRole(ROLES.ADMIN, ROLES.SENIOR_AUTHORITY), adminController.listAuditLogs);
-
 router.get('/analytics', requireRole(ROLES.ADMIN, ROLES.SENIOR_AUTHORITY), adminController.getAnalytics);
 
+// ----- Configuration -----
 router.get('/departments', requireRole(ROLES.ADMIN), adminController.listDepartments);
 router.patch('/departments/:id', requireRole(ROLES.ADMIN), adminController.updateDepartment);
 

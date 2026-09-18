@@ -1,11 +1,23 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, NavLink } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import useAuth from '../hooks/useAuth';
+import { ROLES, normalizeRole } from '../constants/roles';
 
+/**
+ * Shared chrome for every staff console. An ADMIN additionally gets a tab bar,
+ * because administration is two jobs, not one: overseeing complaints and
+ * provisioning the officers / senior authorities who work them.
+ */
 const AdminLayout = () => {
-  const { user, t } = useAuth();
+  const { user, role, t } = useAuth();
+  const isAdmin = normalizeRole(role) === ROLES.ADMIN;
+
+  const adminTabs = [
+    { to: '/admin', label: 'Complaints', icon: 'table_chart', end: true },
+    { to: '/admin/users', label: 'Staff & Users', icon: 'group', end: false },
+  ];
 
   return (
     <div className="min-h-screen flex flex-col bg-background dark:bg-slate-950 font-sans text-on-surface dark:text-slate-100 antialiased transition-colors">
@@ -35,6 +47,30 @@ const AdminLayout = () => {
             </div>
           </div>
         </div>
+
+        {isAdmin && (
+          <div className="max-w-7xl mx-auto px-4 md:px-margin pb-3">
+            <div className="inline-flex p-1 rounded-full bg-surface-container-lowest dark:bg-slate-800 border border-outline-variant/60 dark:border-slate-700 gap-1">
+              {adminTabs.map((tab) => (
+                <NavLink
+                  key={tab.to}
+                  to={tab.to}
+                  end={tab.end}
+                  className={({ isActive }) =>
+                    `px-4 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1.5 transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-primary text-on-primary shadow-sm'
+                        : 'text-on-surface-variant dark:text-slate-300 hover:text-on-surface dark:hover:text-white'
+                    }`
+                  }
+                >
+                  <span className="material-symbols-outlined text-[16px]">{tab.icon}</span>
+                  {tab.label}
+                </NavLink>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
       <main className="w-full flex-1">
         <Outlet />

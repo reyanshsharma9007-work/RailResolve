@@ -1,14 +1,18 @@
 // source/controllers/admin.controller.js
 // HTTP layer for ADMIN-only operations. Every route this controller
-// serves is mounted behind requireRole(ROLES.ADMIN) in admin.router.js,
-// except audit log reads which also permit SENIOR_AUTHORITY per the
-// RBAC matrix.
+// serves is mounted behind requireRole(ROLES.ADMIN) in admin.routes.js,
+// except audit log reads and analytics which also permit SENIOR_AUTHORITY
+// per the RBAC matrix.
 
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
 const { sendSuccess } = require('../utils/apiResponse');
 const validateRequest = require('../utils/validateRequest');
-const { validateRoleChangePayload, validateSlaRulePayload } = require('../validators/admin.validator');
+const {
+  validateCreateUserPayload,
+  validateRoleChangePayload,
+  validateSlaRulePayload,
+} = require('../validators/admin.validator');
 
 const User = require('../models/user.model');
 const Department = require('../models/department.model');
@@ -20,10 +24,15 @@ const { recordAuditEvent } = require('../services/audit.service');
 const { AUDIT_ACTIONS, AUDIT_ENTITY_TYPES, ROLES } = require('../config/constants');
 
 const listUsers = catchAsync(async (req, res) => {
-  const { role, departmentId, page = 1, limit = 20 } = req.query;
+  const { role, departmentId, search, page = 1, limit = 20 } = req.query;
   const filter = {};
   if (role) filter.role = role;
   if (departmentId) filter.departmentId = departmentId;
+  if (search) {
+    // Escaped so a user-supplied string can never act as a regex.
+    const safe = String(search).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    filter.$or = [{ name: new RegExp(safe, 'i') }, { email: new RegExp(safe, 'i') }];
+  }
 
   const pageNum = Math.max(1, parseInt(page, 10) || 1);
   const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
@@ -46,9 +55,66 @@ const listUsers = catchAsync(async (req, res) => {
 });
 
 /**
+ * POST /api/admin/users
+ * Creates a staff account (OFFICER, SENIOR_AUTHORITY or ADMIN) directly,
+ * with a password the admin hands to that person. This is the counterpart
+ * to /api/auth/register, which is PASSENGER-only: staff are provisioned,
+ * never self-served. An OFFICER must be given a departmentCode, which is
+ * what scopes their complaint queue and makes them assignable.
+ */
+const createUser = catchAsync(async (req, res) => {
+  validateRequest(validateCreateUserPayload(req.body));
+
+  const { name, email, password, role, departmentCode, phone } = req.body;
+  const normalizedEmail = email.toLowerCase().trim();
+
+  const existing = await User.findOne({ email: normalizedEmail });
+  if (existing) {
+    throw AppError.conflict('An account with this email already exists', 'EMAIL_TAKEN');
+  }
+
+  let departmentId = null;
+  if (role === ROLES.OFFICER) {
+    const department = await Department.findOne({ code: departmentCode, isActive: true });
+    if (!department) {
+      throw AppError.badRequest('Selected department is invalid or inactive', 'INVALID_DEPARTMENT');
+    }
+    departmentId = department._id;
+  }
+
+  const passwordHash = await User.hashPassword(password);
+
+  const user = await User.create({
+    name: name.trim(),
+    email: normalizedEmail,
+    passwordHash,
+    role,
+    departmentId,
+    phone: phone || null,
+  });
+
+  await recordAuditEvent({
+    actorUserId: req.user._id,
+    action: AUDIT_ACTIONS.USER_REGISTERED,
+    entityType: AUDIT_ENTITY_TYPES.USER,
+    entityId: user._id,
+    newValue: { email: user.email, role: user.role, departmentId: user.departmentId },
+    ipAddress: req.ip,
+  });
+
+  await user.populate('departmentId', 'code name');
+
+  sendSuccess(res, {
+    statusCode: 201,
+    message: 'Staff account created successfully',
+    data: { user },
+  });
+});
+
+/**
  * PATCH /api/admin/users/:id/role
- * Promotes/changes a user's role, and — when assigning OFFICER — their
- * department. This is the only way a non-PASSENGER role is ever granted.
+ * Promotes/changes an existing user's role, and — when assigning OFFICER —
+ * their department.
  */
 const updateUserRole = catchAsync(async (req, res) => {
   validateRequest(validateRoleChangePayload(req.body));
@@ -56,6 +122,10 @@ const updateUserRole = catchAsync(async (req, res) => {
   const { role, departmentCode } = req.body;
   const targetUser = await User.findById(req.params.id);
   if (!targetUser) throw AppError.notFound('User not found');
+
+  if (String(targetUser._id) === String(req.user._id)) {
+    throw AppError.badRequest('You cannot change your own role', 'SELF_ROLE_CHANGE');
+  }
 
   const oldValue = { role: targetUser.role, departmentId: targetUser.departmentId };
 
@@ -81,6 +151,8 @@ const updateUserRole = catchAsync(async (req, res) => {
     ipAddress: req.ip,
   });
 
+  await targetUser.populate('departmentId', 'code name');
+
   sendSuccess(res, { statusCode: 200, message: 'User role updated successfully', data: { user: targetUser } });
 });
 
@@ -88,15 +160,54 @@ const deactivateUser = catchAsync(async (req, res) => {
   const targetUser = await User.findById(req.params.id);
   if (!targetUser) throw AppError.notFound('User not found');
 
+  if (String(targetUser._id) === String(req.user._id)) {
+    throw AppError.badRequest('You cannot deactivate your own account', 'SELF_DEACTIVATION');
+  }
+
   targetUser.isActive = false;
   await targetUser.save();
+  await targetUser.populate('departmentId', 'code name');
 
   sendSuccess(res, { statusCode: 200, message: 'User deactivated successfully', data: { user: targetUser } });
 });
 
 /**
+ * PATCH /api/admin/users/:id/activate
+ * Re-enables a previously deactivated account. Without this, deactivation
+ * is a one-way door and a mistake can only be undone in the database.
+ */
+const activateUser = catchAsync(async (req, res) => {
+  const targetUser = await User.findById(req.params.id);
+  if (!targetUser) throw AppError.notFound('User not found');
+
+  targetUser.isActive = true;
+  await targetUser.save();
+  await targetUser.populate('departmentId', 'code name');
+
+  sendSuccess(res, { statusCode: 200, message: 'User reactivated successfully', data: { user: targetUser } });
+});
+
+/**
+ * PATCH /api/admin/users/:id/password
+ * Admin-set password reset for a staff account that has lost access.
+ */
+const resetUserPassword = catchAsync(async (req, res) => {
+  const { password } = req.body;
+  if (!password || typeof password !== 'string' || password.length < 8) {
+    throw AppError.badRequest('Password must be at least 8 characters long', 'VALIDATION_ERROR');
+  }
+
+  const targetUser = await User.findById(req.params.id);
+  if (!targetUser) throw AppError.notFound('User not found');
+
+  targetUser.passwordHash = await User.hashPassword(password);
+  await targetUser.save();
+
+  sendSuccess(res, { statusCode: 200, message: 'Password reset successfully', data: { user: targetUser } });
+});
+
+/**
  * GET /api/admin/audit-logs
- * Supports filtering by entityType, entityId, action, and actorUserId.
  * Read-only by design — no PATCH/DELETE route exists for audit_logs.
  */
 const listAuditLogs = catchAsync(async (req, res) => {
@@ -197,8 +308,11 @@ const upsertSlaRule = catchAsync(async (req, res) => {
 
 module.exports = {
   listUsers,
+  createUser,
   updateUserRole,
   deactivateUser,
+  activateUser,
+  resetUserPassword,
   listAuditLogs,
   getAnalytics,
   listDepartments,

@@ -14,6 +14,7 @@ import { ROLES } from '../constants/roles';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import AdminDashboard from '../pages/AdminDashboard';
+import AdminUsers from '../pages/AdminUsers';
 import OfficerConsole from '../pages/OfficerConsole';
 import AuthorityConsole from '../pages/AuthorityConsole';
 import Complaint from '../pages/Complaint';
@@ -78,7 +79,9 @@ const AppRoutes = () => {
         <Route path="/authority" element={<AuthorityConsole />} />
       </Route>
 
-      {/* Admin — administration only. */}
+      {/* Admin — complaint oversight plus staff provisioning. /admin/users is
+          where OFFICER and SENIOR_AUTHORITY accounts are created, since the
+          public register endpoint is PASSENGER-only. */}
       <Route
         element={
           <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
@@ -87,6 +90,7 @@ const AppRoutes = () => {
         }
       >
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/users" element={<AdminUsers />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

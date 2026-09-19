@@ -51,7 +51,7 @@ router.post(
 router.post(
   '/:id/resolve',
   loadComplaintWithAccessCheck,
-  requireRole(ROLES.OFFICER, ROLES.SENIOR_AUTHORITY),
+  requireRole(ROLES.OFFICER, ROLES.SENIOR_AUTHORITY, ROLES.ADMIN),
   complaintController.resolveComplaint
 );
 

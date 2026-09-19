@@ -1,7 +1,6 @@
 ﻿// source/validators/admin.validator.js
 // Field-level validation for admin-only payloads: staff account creation,
 // role changes and SLA rule updates.
-
 const { ROLES, ROLE_VALUES, DEPARTMENT_CODE_VALUES, PRIORITY_VALUES } = require('../config/constants');
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

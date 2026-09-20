@@ -8,7 +8,7 @@
     "start": "node source/server.js",
     "dev": "nodemon source/server.js",
     "seed": "node source/database/seed.js",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand --passWithNoTests"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

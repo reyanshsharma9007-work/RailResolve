@@ -1,0 +1,21 @@
+# Dependencies (Frontend & Python FastAPI Backend)
+**/node_modules/
+**/.venv/
+**/venv/
+
+# Build & Output Folders
+**/dist/
+**/build/
+
+# Environment Files (Ignore secrets, allow example templates)
+**/.env
+**/.env.local
+**/.env.*.local
+!**/.env.example
+
+# IDEs & System Files
+.idea/
+.vscode/
+.kilo/
+.DS_Store
+*.log

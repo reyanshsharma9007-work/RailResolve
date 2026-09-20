@@ -52,7 +52,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: backend/railresolve-express-backend
+        working-directory: RailResolve/railresolve-express-backend
 
     steps:
       - name: Checkout repository

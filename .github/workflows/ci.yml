@@ -1,0 +1,97 @@
+name: RailResolve CI
+
+on:
+  push:
+    branches:
+      - main
+      - Reyansh
+  pull_request:
+    branches:
+      - main
+      - Reyansh
+
+jobs:
+  # =========================
+  # FRONTEND CI
+  # =========================
+  frontend:
+    name: Frontend - Lint & Build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: RailResolve-frontend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: RailResolve-frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Build React application
+        run: npm run build
+
+  # =========================
+  # EXPRESS BACKEND CI
+  # =========================
+  express-backend:
+    name: Express Backend - Test
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: RailResolve/railresolve-express-backend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: RailResolve/railresolve-express-backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Jest tests
+        run: npm test
+
+  # =========================
+  # FASTAPI BACKEND CI
+  # =========================
+  fastapi-backend:
+    name: FastAPI Backend - Check
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: RailResolve/railresolve-fastapi-backend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check Python syntax
+        run: python -m compileall .

@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - Reyansh
+
   pull_request:
     branches:
       - main
@@ -20,7 +21,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: RailResolve-frontend
+        working-directory: .
 
     steps:
       - name: Checkout repository
@@ -29,7 +30,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -49,7 +52,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: RailResolve/railresolve-express-backend
+        working-directory: backend/railresolve-express-backend
 
     steps:
       - name: Checkout repository
@@ -58,9 +61,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
-          cache-dependency-path: RailResolve/railresolve-express-backend/package-lock.json
+          cache-dependency-path: backend/railresolve-express-backend/package-lock.json
 
       - name: Install dependencies
         run: npm ci

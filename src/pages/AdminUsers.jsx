@@ -3,7 +3,8 @@ import useAuth from '../hooks/useAuth';
 import Modal from '../components/common/Modal';
 import { adminService } from '../services/adminService';
 import { ROLES } from '../constants/roles';
-
+
+import Icon from '../components/common/Icon';
 /**
  * Staff & user management. This is the missing half of the admin story:
  * OFFICER and SENIOR_AUTHORITY accounts are never self-registered (the public
@@ -187,7 +188,7 @@ const AdminUsers = () => {
   if (loading) {
     return (
       <div className="w-full max-w-7xl mx-auto px-4 py-16 text-center">
-        <span className="material-symbols-outlined animate-spin text-4xl text-primary mb-4">refresh</span>
+        <Icon name="refresh" className="animate-spin text-4xl text-primary mb-4" />
         <p className="text-on-surface dark:text-white font-bold text-sm">Loading staff directory...</p>
       </div>
     );
@@ -209,7 +210,7 @@ const AdminUsers = () => {
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-on-surface-variant dark:text-slate-400 uppercase">{card.label}</span>
               <span className={`p-2 rounded-xl ${card.tone}`}>
-                <span className="material-symbols-outlined text-[20px]">{card.icon}</span>
+                <Icon name={card.icon} className="text-[20px]" />
               </span>
             </div>
             <p className="text-3xl font-black text-on-surface dark:text-white mt-2">{card.value}</p>
@@ -219,10 +220,10 @@ const AdminUsers = () => {
 
       {banner && (
         <div className="mb-4 flex items-start gap-2 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 px-4 py-3 rounded-2xl text-xs font-bold">
-          <span className="material-symbols-outlined text-[18px]">check_circle</span>
+          <Icon name="check_circle" className="text-[18px]" />
           <span className="flex-1">{banner}</span>
           <button type="button" onClick={() => setBanner(null)} className="cursor-pointer">
-            <span className="material-symbols-outlined text-[18px]">close</span>
+            <Icon name="close" className="text-[18px]" />
           </button>
         </div>
       )}
@@ -252,7 +253,7 @@ const AdminUsers = () => {
           <div>
             <label className="text-[10px] font-bold text-on-surface-variant dark:text-slate-400 block uppercase mb-1">Search</label>
             <div className="relative flex items-center bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-xl px-3 py-1.5 w-64">
-              <span className="material-symbols-outlined text-outline dark:text-slate-400 text-[18px] mr-1.5">search</span>
+              <Icon name="search" className="text-outline dark:text-slate-400 text-[18px] mr-1.5" />
               <input
                 type="text"
                 value={search}
@@ -269,7 +270,7 @@ const AdminUsers = () => {
           onClick={openCreate}
           className="px-5 py-2.5 rounded-full bg-primary text-on-primary text-xs font-extrabold shadow-md hover:bg-primary-container active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
         >
-          <span className="material-symbols-outlined text-[18px]">person_add</span>
+          <Icon name="person_add" className="text-[18px]" />
           Create staff account
         </button>
       </div>
@@ -278,7 +279,7 @@ const AdminUsers = () => {
       <div className="bg-surface-container-lowest dark:bg-slate-900 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-lg overflow-hidden transition-colors">
         <div className="px-6 py-4 border-b border-outline-variant/60 dark:border-slate-800 flex items-center justify-between">
           <h3 className="text-base font-extrabold text-on-surface dark:text-white flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-[20px]">badge</span>
+            <Icon name="badge" className="text-primary text-[20px]" />
             Staff &amp; user directory
           </h3>
           <span className="text-xs font-bold text-on-surface-variant dark:text-slate-400 bg-surface-container-low dark:bg-slate-800 px-3 py-1 rounded-full">

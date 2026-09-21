@@ -5,7 +5,8 @@ import StatusBadge from '../components/common/StatusBadge';
 import AddJourneyModal from '../components/common/AddJourneyModal';
 import { journeyService } from '../services/journeyService';
 import { complaintService } from '../services/complaintService';
-
+
+import Icon from '../components/common/Icon';
 const TicketBooking = () => {
   const { user, t } = useAuth();
   const navigate = useNavigate();
@@ -77,7 +78,7 @@ const TicketBooking = () => {
             onClick={() => setJourneyModalOpen(true)}
             className="px-5 py-3 rounded-2xl bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 hover:border-primary text-on-surface dark:text-white font-extrabold text-xs shadow-sm active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
           >
-            <span className="material-symbols-outlined text-[18px] text-primary">add_circle</span>
+            <Icon name="add_circle" className="text-[18px] text-primary" />
             <span>{t('addJourneyBtn', 'Add Journey')}</span>
           </button>
           <button
@@ -85,7 +86,7 @@ const TicketBooking = () => {
             onClick={() => navigate('/report')}
             className="px-5 py-3 rounded-2xl bg-primary hover:bg-primary-container text-on-primary font-extrabold text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
           >
-            <span className="material-symbols-outlined text-[18px]">report_problem</span>
+            <Icon name="report_problem" className="text-[18px]" />
             <span>{t('reportOnboardGrievanceBtn')}</span>
           </button>
         </div>
@@ -106,7 +107,7 @@ const TicketBooking = () => {
 
       {loading ? (
         <div className="text-center py-10">
-          <span className="material-symbols-outlined animate-spin text-4xl text-primary mb-4">refresh</span>
+          <Icon name="refresh" className="animate-spin text-4xl text-primary mb-4" />
           <p className="text-on-surface dark:text-white font-bold text-sm">Loading your journeys and complaints...</p>
         </div>
       ) : error ? (
@@ -119,7 +120,7 @@ const TicketBooking = () => {
           <div className="lg:col-span-8 space-y-6">
             <div className="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-sm transition-colors">
               <h3 className="text-base font-extrabold text-on-surface dark:text-white mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-[20px]">confirmation_number</span>
+                <Icon name="confirmation_number" className="text-primary text-[20px]" />
                 {t('activeBookings')}
               </h3>
 
@@ -134,7 +135,7 @@ const TicketBooking = () => {
                       onClick={() => setJourneyModalOpen(true)}
                       className="px-5 py-2.5 rounded-full bg-primary text-on-primary font-extrabold text-xs shadow-md active:scale-95 transition-all inline-flex items-center gap-2 cursor-pointer"
                     >
-                      <span className="material-symbols-outlined text-[18px]">add_circle</span>
+                      <Icon name="add_circle" className="text-[18px]" />
                       <span>{t('addJourneyBtn', 'Add Journey')}</span>
                     </button>
                   </div>
@@ -184,7 +185,7 @@ const TicketBooking = () => {
                             onClick={() => navigate(`/report?journeyId=${ticket._id}`)}
                             className="px-3 py-1.5 rounded-full bg-primary text-on-primary hover:bg-primary-container transition-colors flex items-center gap-1 text-[11px] cursor-pointer"
                           >
-                            <span className="material-symbols-outlined text-[14px]">report_problem</span>
+                            <Icon name="report_problem" className="text-[14px]" />
                             <span>{t('fileGrievanceJourney')}</span>
                           </button>
                         </div>
@@ -198,7 +199,7 @@ const TicketBooking = () => {
             {/* Past Complaints History */}
             <div className="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-sm transition-colors">
               <h3 className="text-base font-extrabold text-on-surface dark:text-white mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-[20px]">history</span>
+                <Icon name="history" className="text-primary text-[20px]" />
                 {t('filedGrievancesHistory')}
               </h3>
 
@@ -234,7 +235,7 @@ const TicketBooking = () => {
           <div className="lg:col-span-4 space-y-6">
             <div className="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-sm transition-colors">
               <h3 className="text-sm font-extrabold text-on-surface dark:text-white mb-3 flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-[20px]">payments</span>
+                <Icon name="payments" className="text-primary text-[20px]" />
                 {t('refundCompensation')}
               </h3>
               <div className="p-4 bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 rounded-2xl mb-3 text-xs">
@@ -245,7 +246,7 @@ const TicketBooking = () => {
 
             <div className="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-sm transition-colors">
               <h3 className="text-sm font-extrabold text-on-surface dark:text-white mb-3 flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-[20px]">badge</span>
+                <Icon name="badge" className="text-primary text-[20px]" />
                 {t('accountProfile')}
               </h3>
               <div className="space-y-2 text-xs font-semibold text-on-surface-variant dark:text-slate-300">

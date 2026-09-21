@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import StatusBadge from '../components/common/StatusBadge';
-
+
+import Icon from '../components/common/Icon';
 const Home = () => {
   const [activeTab, setActiveTab] = useState('track'); // 'track' | 'report'
   const [searchRef, setSearchRef] = useState('RR-8942-VB');
@@ -113,7 +114,7 @@ const Home = () => {
                   : 'text-white/90 hover:text-white hover:bg-white/10'
               }`}
             >
-              <span className="material-symbols-outlined text-[20px] text-primary">search_check</span>
+              <Icon name="search_check" className="text-[20px] text-primary" />
               <span>{t('trackComplaintPnr')}</span>
             </button>
             <button
@@ -124,7 +125,7 @@ const Home = () => {
                   : 'text-white/90 hover:text-white hover:bg-white/10'
               }`}
             >
-              <span className="material-symbols-outlined text-[20px] text-primary-container">report_problem</span>
+              <Icon name="report_problem" className="text-[20px] text-primary-container" />
               <span>{t('reportOnboardGrievance')}</span>
             </button>
           </div>
@@ -134,7 +135,7 @@ const Home = () => {
             <div className="w-full max-w-2xl bg-surface-container-lowest/95 dark:bg-slate-900/95 backdrop-blur-2xl p-space-md md:p-space-lg rounded-2xl md:rounded-3xl shadow-2xl border border-white/80 dark:border-slate-700 transition-all">
               <form onSubmit={handleTrackSubmit} className="flex flex-col sm:flex-row items-center gap-space-sm">
                 <div className="relative w-full flex items-center bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl px-space-md py-3 focus-within:border-primary transition-all">
-                  <span className="material-symbols-outlined text-outline dark:text-slate-400 text-[22px] mr-space-xs">pin</span>
+                  <Icon name="pin" className="text-outline dark:text-slate-400 text-[22px] mr-space-xs" />
                   <input
                     type="text"
                     value={searchRef}
@@ -147,7 +148,7 @@ const Home = () => {
                   type="submit"
                   className="w-full sm:w-auto bg-primary hover:bg-primary-container text-on-primary font-extrabold text-sm px-space-lg py-3.5 rounded-2xl shadow-md transition-all flex items-center justify-center gap-space-xs shrink-0"
                 >
-                  <span className="material-symbols-outlined text-[20px]">troubleshoot</span>
+                  <Icon name="troubleshoot" className="text-[20px]" />
                   <span>{t('fetchTelemetry')}</span>
                 </button>
               </form>
@@ -178,7 +179,7 @@ const Home = () => {
                 </p>
                 <div className="mt-3 flex items-center justify-between text-[11px] font-bold text-primary">
                   <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px]">schedule</span> {t('slaCountdown')} 12m 45s
+                    <Icon name="schedule" className="text-[14px]" /> {t('slaCountdown')} 12m 45s
                   </span>
                   <span className="flex items-center gap-1 hover:underline">
                     {t('viewTelemetry')} &rarr;
@@ -229,7 +230,7 @@ const Home = () => {
                 onClick={() => navigate('/report')}
                 className="w-full bg-primary hover:bg-primary-container text-on-primary font-extrabold text-sm py-3 rounded-2xl shadow-md transition-all flex items-center justify-center gap-2"
               >
-                <span className="material-symbols-outlined text-[18px]">send</span>
+                <Icon name="send" className="text-[18px]" />
                 <span>{t('proceedReport')} &rarr;</span>
               </button>
             </div>
@@ -242,7 +243,7 @@ const Home = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
           <div className="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-2xl shadow-xl border border-outline-variant/60 dark:border-slate-800 flex items-center gap-4 transition-colors">
             <div className="w-14 h-14 rounded-2xl bg-orange-50 dark:bg-slate-800 text-primary flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined text-[32px]">train</span>
+              <Icon name="train" className="text-[32px]" />
             </div>
             <div>
               <p className="text-2xl font-black text-on-surface dark:text-white tracking-tight">102 Rakes</p>
@@ -252,7 +253,7 @@ const Home = () => {
           </div>
           <div className="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-2xl shadow-xl border border-outline-variant/60 dark:border-slate-800 flex items-center gap-4 transition-colors">
             <div className="w-14 h-14 rounded-2xl bg-orange-50 dark:bg-slate-800 text-primary flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined text-[32px]">timer</span>
+              <Icon name="timer" className="text-[32px]" />
             </div>
             <div>
               <p className="text-2xl font-black text-on-surface dark:text-white tracking-tight">18.4 Mins</p>
@@ -262,7 +263,7 @@ const Home = () => {
           </div>
           <div className="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-2xl shadow-xl border border-outline-variant/60 dark:border-slate-800 flex items-center gap-4 transition-colors">
             <div className="w-14 h-14 rounded-2xl bg-orange-50 dark:bg-slate-800 text-primary flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined text-[32px]">thumb_up</span>
+              <Icon name="thumb_up" className="text-[32px]" />
             </div>
             <div>
               <p className="text-2xl font-black text-on-surface dark:text-white tracking-tight">96.8%</p>
@@ -295,7 +296,7 @@ const Home = () => {
               className="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-md hover:shadow-xl hover:border-primary/50 transition-all cursor-pointer group"
             >
               <div className="w-12 h-12 rounded-2xl bg-surface-container-low dark:bg-slate-800 group-hover:bg-primary group-hover:text-on-primary text-primary flex items-center justify-center mb-4 transition-colors">
-                <span className="material-symbols-outlined text-[26px]">{item.icon}</span>
+                <Icon name={item.icon} className="text-[26px]" />
               </div>
               <h3 className="text-base font-extrabold text-on-surface dark:text-white group-hover:text-primary transition-colors">
                 {t(item.titleKey)}
@@ -305,7 +306,7 @@ const Home = () => {
               </p>
               <div className="mt-4 flex items-center text-xs font-bold text-primary gap-1 group-hover:translate-x-1 transition-transform">
                 <span>{t('fileReport')}</span>
-                <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                <Icon name="arrow_forward" className="text-[16px]" />
               </div>
             </div>
           ))}
@@ -344,7 +345,7 @@ const Home = () => {
                 <tbody className="divide-y divide-outline-variant/40 dark:divide-slate-700 font-semibold text-on-surface-variant dark:text-slate-300">
                   <tr>
                     <td className="p-4 font-bold text-on-surface dark:text-white flex items-center gap-2">
-                      <span className="material-symbols-outlined text-primary text-[18px]">medical_services</span>
+                      <Icon name="medical_services" className="text-primary text-[18px]" />
                       {t('medicalEmergency')}
                     </td>
                     <td className="p-4">{t('medicalResponder')}</td>
@@ -354,7 +355,7 @@ const Home = () => {
                   </tr>
                   <tr>
                     <td className="p-4 font-bold text-on-surface dark:text-white flex items-center gap-2">
-                      <span className="material-symbols-outlined text-primary text-[18px]">ac_unit</span>
+                      <Icon name="ac_unit" className="text-primary text-[18px]" />
                       {t('hvacMalfunction')}
                     </td>
                     <td className="p-4">{t('hvacResponder')}</td>
@@ -364,7 +365,7 @@ const Home = () => {
                   </tr>
                   <tr>
                     <td className="p-4 font-bold text-on-surface dark:text-white flex items-center gap-2">
-                      <span className="material-symbols-outlined text-primary text-[18px]">cleaning_services</span>
+                      <Icon name="cleaning_services" className="text-primary text-[18px]" />
                       {t('coachHygiene')}
                     </td>
                     <td className="p-4">{t('coachResponder')}</td>
@@ -398,9 +399,7 @@ const Home = () => {
                 className="w-full p-4 text-left font-bold text-sm text-on-surface dark:text-white flex items-center justify-between hover:bg-surface-container-low dark:hover:bg-slate-800 transition-colors"
               >
                 <span>{t(item.qKey)}</span>
-                <span className="material-symbols-outlined text-outline">
-                  {faqOpen[idx] ? 'expand_less' : 'expand_more'}
-                </span>
+                <Icon name={faqOpen[idx] ? 'expand_less' : 'expand_more'} className="text-outline" />
               </button>
               {faqOpen[idx] && (
                 <div className="px-4 pb-4 pt-1 text-xs text-on-surface-variant dark:text-slate-300 font-medium leading-relaxed border-t border-outline-variant/40 dark:border-slate-800">

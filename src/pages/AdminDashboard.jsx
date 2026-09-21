@@ -6,7 +6,8 @@ import Modal from '../components/common/Modal';
 import { complaintService } from '../services/complaintService';
 import { adminService } from '../services/adminService';
 import { ROLES, normalizeRole } from '../constants/roles';
-
+
+import Icon from '../components/common/Icon';
 // Mirrors STATUS_TRANSITIONS in the backend's config/constants.js. Offering
 // anything outside this set just produces a rejected request.
 const STATUS_TRANSITIONS = {
@@ -243,7 +244,7 @@ const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="w-full max-w-7xl mx-auto px-4 py-16 text-center">
-        <span className="material-symbols-outlined animate-spin text-4xl text-primary mb-4">refresh</span>
+        <Icon name="refresh" className="animate-spin text-4xl text-primary mb-4" />
         <p className="text-on-surface dark:text-white font-bold text-sm">Loading admin dashboard...</p>
       </div>
     );
@@ -257,7 +258,7 @@ const AdminDashboard = () => {
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-on-surface-variant dark:text-slate-400 uppercase">{t('totalLiveActive')}</span>
             <span className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-300">
-              <span className="material-symbols-outlined text-[20px]">assignment</span>
+              <Icon name="assignment" className="text-[20px]" />
             </span>
           </div>
           <p className="text-3xl font-black text-on-surface dark:text-white mt-2">{totalCount}</p>
@@ -268,7 +269,7 @@ const AdminDashboard = () => {
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-on-surface-variant dark:text-slate-400 uppercase">{t('inProgressAction')}</span>
             <span className="p-2 rounded-xl bg-orange-50 dark:bg-orange-950 text-primary">
-              <span className="material-symbols-outlined text-[20px]">engineering</span>
+              <Icon name="engineering" className="text-[20px]" />
             </span>
           </div>
           <p className="text-3xl font-black text-on-surface dark:text-white mt-2">{inProgressCount}</p>
@@ -283,7 +284,7 @@ const AdminDashboard = () => {
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-on-surface-variant dark:text-slate-400 uppercase">{t('pendingTriage')}</span>
             <span className="p-2 rounded-xl bg-red-50 dark:bg-red-950 text-error">
-              <span className="material-symbols-outlined text-[20px]">pending_actions</span>
+              <Icon name="pending_actions" className="text-[20px]" />
             </span>
           </div>
           <p className="text-3xl font-black text-on-surface dark:text-white mt-2">{openCount}</p>
@@ -294,7 +295,7 @@ const AdminDashboard = () => {
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-on-surface-variant dark:text-slate-400 uppercase">{t('resolvedToday')}</span>
             <span className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-300">
-              <span className="material-symbols-outlined text-[20px]">task_alt</span>
+              <Icon name="task_alt" className="text-[20px]" />
             </span>
           </div>
           <p className="text-3xl font-black text-on-surface dark:text-white mt-2">{resolvedCount}</p>
@@ -343,7 +344,7 @@ const AdminDashboard = () => {
         <div className="w-full md:w-72">
           <label className="text-[10px] font-bold text-on-surface-variant dark:text-slate-400 block uppercase mb-1">{t('searchMatrix')}</label>
           <div className="relative flex items-center bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-xl px-3 py-1.5">
-            <span className="material-symbols-outlined text-outline dark:text-slate-400 text-[18px] mr-1.5">search</span>
+            <Icon name="search" className="text-outline dark:text-slate-400 text-[18px] mr-1.5" />
             <input
               type="text"
               value={searchQuery}
@@ -359,7 +360,7 @@ const AdminDashboard = () => {
       <div className="bg-surface-container-lowest dark:bg-slate-900 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-lg overflow-hidden transition-colors">
         <div className="px-6 py-4 border-b border-outline-variant/60 dark:border-slate-800 flex items-center justify-between">
           <h3 className="text-base font-extrabold text-on-surface dark:text-white flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-[20px]">table_chart</span>
+            <Icon name="table_chart" className="text-primary text-[20px]" />
             {t('liveOperationalStream')}
           </h3>
           <span className="text-xs font-bold text-on-surface-variant dark:text-slate-400 bg-surface-container-low dark:bg-slate-800 px-3 py-1 rounded-full">
@@ -414,7 +415,7 @@ const AdminDashboard = () => {
                       <div className="space-y-1">
                         <StatusBadge status={c.status} />
                         <p className="text-[10px] font-bold text-error dark:text-red-400 flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[12px]">timer</span>
+                          <Icon name="timer" className="text-[12px]" />
                           SLA Tracked
                         </p>
                       </div>
@@ -429,7 +430,7 @@ const AdminDashboard = () => {
                           onClick={() => handleOpenDrawer(c)}
                           className="px-3 py-1.5 rounded-full bg-primary text-on-primary font-bold hover:bg-primary-container transition-all shadow-xs flex items-center gap-1 cursor-pointer"
                         >
-                          <span className="material-symbols-outlined text-[16px]">edit</span>
+                          <Icon name="edit" className="text-[16px]" />
                           <span>{t('triageBtn')}</span>
                         </button>
                         <button
@@ -438,7 +439,7 @@ const AdminDashboard = () => {
                           className="p-1.5 rounded-full bg-surface-container-low dark:bg-slate-800 hover:bg-surface-container dark:hover:bg-slate-700 text-on-surface-variant dark:text-slate-300 transition-colors cursor-pointer"
                           title={t('viewTelemetryPage')}
                         >
-                          <span className="material-symbols-outlined text-[18px]">visibility</span>
+                          <Icon name="visibility" className="text-[18px]" />
                         </button>
                       </div>
                     </td>
@@ -478,13 +479,13 @@ const AdminDashboard = () => {
             {/* AI analysis, fetched through Express (never directly from FastAPI). */}
             {detailLoading ? (
               <div className="p-3 rounded-2xl bg-surface-container-low dark:bg-slate-800 text-xs font-bold text-on-surface-variant dark:text-slate-300 flex items-center gap-2">
-                <span className="material-symbols-outlined animate-spin text-[16px] text-primary">refresh</span>
+                <Icon name="refresh" className="animate-spin text-[16px] text-primary" />
                 Loading analysis...
               </div>
             ) : detail?.aiAnalysis?.processingStatus === 'SUCCESS' ? (
               <div className="p-4 rounded-2xl bg-surface-container-low dark:bg-slate-800 border border-outline-variant/60 dark:border-slate-700">
                 <h5 className="text-xs font-extrabold text-on-surface dark:text-white mb-2 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-[18px]">auto_awesome</span>
+                  <Icon name="auto_awesome" className="text-primary text-[18px]" />
                   AI Analysis
                 </h5>
                 {detail.aiAnalysis.summary && (
@@ -612,9 +613,9 @@ const AdminDashboard = () => {
                 className="px-6 py-2.5 text-xs font-extrabold text-on-primary bg-primary hover:bg-primary-container disabled:opacity-50 rounded-full shadow-md active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
               >
                 {updating ? (
-                  <span className="material-symbols-outlined animate-spin text-[18px]">refresh</span>
+                  <Icon name="refresh" className="animate-spin text-[18px]" />
                 ) : (
-                  <span className="material-symbols-outlined text-[18px]">save</span>
+                  <Icon name="save" className="text-[18px]" />
                 )}
                 <span>{updating ? 'Saving...' : t('saveTelemetryBtn')}</span>
               </button>
@@ -625,7 +626,7 @@ const AdminDashboard = () => {
               triggers a status transition. */}
           <div className="mt-6 pt-4 border-t border-outline-variant/60 dark:border-slate-700 text-left">
             <h5 className="text-xs font-extrabold text-on-surface dark:text-white mb-3 flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary text-[18px]">forum</span>
+              <Icon name="forum" className="text-primary text-[18px]" />
               Comments ({detail?.comments?.length || 0})
             </h5>
             <div className="space-y-2 max-h-40 overflow-y-auto mb-3">

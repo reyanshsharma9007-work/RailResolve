@@ -3,7 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import { notificationService } from '../../services/notificationService';
 import { isStaff, isPassenger, homeRouteForRole, roleLabelKey, normalizeRole } from '../../constants/roles';
-
+
+import Icon from './Icon';
 const Navbar = () => {
   const { user, role, logout, language, toggleLanguage, isAuthenticated, theme, toggleTheme, t } = useAuth();
   const navigate = useNavigate();
@@ -123,7 +124,7 @@ const Navbar = () => {
             href="tel:139"
             className="hidden sm:flex items-center gap-1.5 bg-error-container text-on-error-container dark:bg-red-950/80 dark:text-red-200 px-3 py-1.5 rounded-full text-xs font-bold border border-error/20 hover:bg-red-200 dark:hover:bg-red-900/80 hover:shadow-sm focus-visible:ring-2 focus-visible:ring-error/50 focus-visible:outline-none active:scale-95 transition-all whitespace-nowrap"
           >
-            <span className="material-symbols-outlined text-[16px]">call</span>
+            <Icon name="call" className="text-[16px]" />
             <span>{t('emergencyDial')}</span>
           </a>
 
@@ -149,9 +150,7 @@ const Navbar = () => {
             title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             className="p-2 rounded-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/60 dark:border-slate-700 text-on-surface-variant dark:text-slate-200 hover:text-primary dark:hover:text-primary hover:border-primary/40 dark:hover:border-primary/40 hover:shadow-sm focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:outline-none active:scale-95 transition-all flex items-center justify-center shrink-0 cursor-pointer"
           >
-            <span className="material-symbols-outlined text-[20px]">
-              {theme === 'dark' ? 'light_mode' : 'dark_mode'}
-            </span>
+            <Icon name={theme === 'dark' ? 'light_mode' : 'dark_mode'} className="text-[20px]" />
           </button>
 
           {/* Notifications Bell */}
@@ -165,7 +164,7 @@ const Navbar = () => {
                 }}
                 className="relative p-2 rounded-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/60 dark:border-slate-700 text-on-surface-variant dark:text-slate-200 hover:text-primary dark:hover:text-primary hover:border-primary/40 hover:shadow-sm focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:outline-none active:scale-95 transition-all flex items-center justify-center cursor-pointer"
               >
-                <span className="material-symbols-outlined text-[20px]">notifications</span>
+                <Icon name="notifications" className="text-[20px]" />
                 {unreadCount > 0 && (
                   <span className="absolute top-0 right-0 -mt-1 -mr-1 flex h-4 w-4 items-center justify-center rounded-full bg-error text-[10px] font-bold text-white shadow-sm ring-2 ring-surface-container-lowest dark:ring-slate-900">
                     {unreadCount}
@@ -223,7 +222,7 @@ const Navbar = () => {
                   <p className="text-xs font-bold text-on-surface dark:text-white leading-tight">{user?.name || "Rajesh Kumar"}</p>
                   <p className="text-[10px] font-bold text-primary">{t(roleLabelKey(currentRole))}</p>
                 </div>
-                <span className="material-symbols-outlined text-outline text-[16px]">arrow_drop_down</span>
+                <Icon name="arrow_drop_down" className="text-outline text-[16px]" />
               </button>
 
               {userMenuOpen && (
@@ -241,7 +240,7 @@ const Navbar = () => {
                       onClick={() => setUserMenuOpen(false)}
                       className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-on-surface dark:text-slate-200 hover:bg-surface-container-low dark:hover:bg-slate-700 transition-colors"
                     >
-                      <span className="material-symbols-outlined text-[18px] text-primary">confirmation_number</span>
+                      <Icon name="confirmation_number" className="text-[18px] text-primary" />
                       {t('myTickets')}
                     </Link>
                   )}
@@ -251,7 +250,7 @@ const Navbar = () => {
                       onClick={() => setUserMenuOpen(false)}
                       className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-on-surface dark:text-slate-200 hover:bg-surface-container-low dark:hover:bg-slate-700 transition-colors"
                     >
-                      <span className="material-symbols-outlined text-[18px] text-primary">admin_panel_settings</span>
+                      <Icon name="admin_panel_settings" className="text-[18px] text-primary" />
                       {t('consoleNavLabel', 'Console')}
                     </Link>
                   )}
@@ -264,7 +263,7 @@ const Navbar = () => {
                     }}
                     className="w-full text-left flex items-center gap-2 px-4 py-2 text-xs font-bold text-error hover:bg-error-container/30 border-t border-outline-variant/40 dark:border-slate-700 transition-colors cursor-pointer"
                   >
-                    <span className="material-symbols-outlined text-[18px]">logout</span>
+                    <Icon name="logout" className="text-[18px]" />
                     {t('signOut')}
                   </button>
                 </div>

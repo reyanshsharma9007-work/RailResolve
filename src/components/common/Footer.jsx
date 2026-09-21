@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
-
+
+import Icon from './Icon';
 const Footer = () => {
   const { t } = useAuth();
 
@@ -34,7 +35,7 @@ const Footer = () => {
               {t('integratedRedressalSub')}
             </p>
             <div className="flex items-center gap-space-xs text-xs font-bold text-primary">
-              <span className="material-symbols-outlined text-[16px]">verified</span>
+              <Icon name="verified" className="text-[16px]" />
               <span>{t('apiSync')}</span>
             </div>
           </div>

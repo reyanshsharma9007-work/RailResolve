@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import { homeRouteForRole, ROLES } from '../constants/roles';
 import heroTrainImg from '../assets/hero-train.jpg';
-
+
+import Icon from '../components/common/Icon';
 const Login = () => {
   const [authMode, setAuthMode] = useState('signin'); // 'signin' | 'signup'
   // Presentation only. The backend's authenticated role decides where the
@@ -192,7 +193,7 @@ const Login = () => {
                       : 'text-on-surface-variant dark:text-slate-300 hover:text-on-surface dark:hover:text-white hover:bg-surface-container/60 dark:hover:bg-slate-700/60'
                   }`}
                 >
-                  <span className="material-symbols-outlined text-[16px]">{option.icon}</span>
+                  <Icon name={option.icon} className="text-[16px]" />
                   <span className="truncate">{t(option.labelKey, option.fallback)}</span>
                 </button>
               ))}
@@ -228,9 +229,7 @@ const Login = () => {
                     {isStaffSelection ? t('adminIdentifierLabel') : t('signInIdentifierLabel')}
                   </label>
                   <div className="relative flex items-center bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl px-3.5 py-3 hover:border-primary/50 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
-                    <span className="material-symbols-outlined text-outline dark:text-slate-400 text-[20px] mr-2">
-                      {isStaffSelection ? 'badge' : 'person'}
-                    </span>
+                    <Icon name={isStaffSelection ? 'badge' : 'person'} className="text-outline dark:text-slate-400 text-[20px] mr-2" />
                     <input
                       type="text"
                       required
@@ -247,7 +246,7 @@ const Login = () => {
                     {t('password')}
                   </label>
                   <div className="relative flex items-center bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl px-3.5 py-3 hover:border-primary/50 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
-                    <span className="material-symbols-outlined text-outline dark:text-slate-400 text-[20px] mr-2">lock</span>
+                    <Icon name="lock" className="text-outline dark:text-slate-400 text-[20px] mr-2" />
                     <input
                       type="password"
                       required

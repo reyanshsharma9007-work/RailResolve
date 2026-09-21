@@ -6,7 +6,8 @@ import { journeyService } from '../services/journeyService';
 import { referenceService } from '../services/referenceService';
 import { complaintService } from '../services/complaintService';
 import { attachmentService } from '../services/attachmentService';
-
+
+import Icon from '../components/common/Icon';
 const ReportComplaint = () => {
   const [searchParams] = useSearchParams();
   const preJourneyId = searchParams.get('journeyId') || '';
@@ -123,14 +124,14 @@ const ReportComplaint = () => {
 
       {loadingData ? (
         <div className="text-center py-10">
-          <span className="material-symbols-outlined animate-spin text-4xl text-primary mb-4">refresh</span>
+          <Icon name="refresh" className="animate-spin text-4xl text-primary mb-4" />
           <p className="text-on-surface dark:text-white font-bold text-sm">Loading form data...</p>
         </div>
       ) : journeys.length === 0 ? (
         /* A complaint is always filed against a journey the passenger owns, so
            explain the blocker rather than silently disabling the form. */
         <div className="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-lg text-center transition-colors">
-          <span className="material-symbols-outlined text-4xl text-primary mb-3">train</span>
+          <Icon name="train" className="text-4xl text-primary mb-3" />
           <h2 className="text-base font-extrabold text-on-surface dark:text-white mb-2">
             No journey found. Add a journey to report a grievance.
           </h2>
@@ -143,7 +144,7 @@ const ReportComplaint = () => {
             onClick={() => setJourneyModalOpen(true)}
             className="px-6 py-3 rounded-2xl bg-primary hover:bg-primary-container text-on-primary font-extrabold text-xs shadow-md active:scale-95 transition-all inline-flex items-center gap-2 cursor-pointer"
           >
-            <span className="material-symbols-outlined text-[18px]">add_circle</span>
+            <Icon name="add_circle" className="text-[18px]" />
             <span>{t('addJourneyBtn', 'Add Journey')}</span>
           </button>
         </div>
@@ -232,7 +233,7 @@ const ReportComplaint = () => {
           <div>
             <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">{t('uploadPhotoLabel')}</label>
             <div className="relative flex items-center bg-surface-container-low dark:bg-slate-800 border border-dashed border-outline dark:border-slate-700 rounded-2xl px-4 py-2.5 cursor-pointer hover:bg-surface-container dark:hover:bg-slate-750 transition-colors">
-              <span className="material-symbols-outlined text-outline dark:text-slate-400 text-[20px] mr-2">cloud_upload</span>
+              <Icon name="cloud_upload" className="text-outline dark:text-slate-400 text-[20px] mr-2" />
               <span className="text-xs font-bold text-on-surface-variant dark:text-slate-300 truncate">
                 {photo ? photo.name : t('photoPlaceholder')}
               </span>
@@ -251,9 +252,9 @@ const ReportComplaint = () => {
             className="w-full bg-primary hover:bg-primary-container disabled:opacity-50 text-on-primary font-extrabold text-sm py-4 rounded-2xl shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             {submitting ? (
-              <span className="material-symbols-outlined animate-spin text-[20px]">refresh</span>
+              <Icon name="refresh" className="animate-spin text-[20px]" />
             ) : (
-              <span className="material-symbols-outlined text-[20px]">send</span>
+              <Icon name="send" className="text-[20px]" />
             )}
             <span>{submitting ? 'Submitting...' : t('submitGrievanceBtn') + ' \u2192'}</span>
           </button>

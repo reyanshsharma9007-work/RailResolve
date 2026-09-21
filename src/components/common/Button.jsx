@@ -1,5 +1,6 @@
 import React from 'react';
-
+
+import Icon from './Icon';
 const Button = ({
   children,
   onClick,
@@ -37,7 +38,7 @@ const Button = ({
       disabled={disabled}
       className={`${baseStyle} ${variantStyle} ${sizeStyle} ${className}`}
     >
-      {icon && <span className="material-symbols-outlined text-[18px] mr-1.5">{icon}</span>}
+      {icon && <Icon name={icon} className="text-[18px] mr-1.5" />}
       {children}
     </button>
   );

@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: railresolve-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: railresolve-frontend
+  template:
+    metadata:
+      labels:
+        app: railresolve-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: ghcr.io/reyanshsharma9007-work/railresolve-frontend:latest
+          ports:
+            - containerPort: 80
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+            limits:
+              cpu: "300m"
+              memory: "256Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: railresolve-frontend
+spec:
+  selector:
+    app: railresolve-frontend
+  ports:
+    - port: 80
+      targetPort: 80
+  type: NodePort

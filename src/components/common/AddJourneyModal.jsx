@@ -3,7 +3,8 @@ import Modal from './Modal';
 import useAuth from '../../hooks/useAuth';
 import { referenceService } from '../../services/referenceService';
 import { journeyService } from '../../services/journeyService';
-
+
+import Icon from './Icon';
 /**
  * Collects the fields POST /api/journeys requires and creates a real journey.
  * Train and station options come from GET /api/reference/trains and
@@ -137,7 +138,7 @@ const AddJourneyModal = ({ isOpen, onClose, onCreated }) => {
     <Modal isOpen={isOpen} onClose={handleClose} title={t('addJourneyTitle', 'Enter Journey Details')}>
       {loadingRefs ? (
         <div className="text-center py-8">
-          <span className="material-symbols-outlined animate-spin text-3xl text-primary mb-3">refresh</span>
+          <Icon name="refresh" className="animate-spin text-3xl text-primary mb-3" />
           <p className="text-on-surface dark:text-white font-bold text-sm">Loading trains and stations...</p>
         </div>
       ) : refError ? (
@@ -285,9 +286,9 @@ const AddJourneyModal = ({ isOpen, onClose, onCreated }) => {
               className="px-6 py-2.5 text-xs font-extrabold text-on-primary bg-primary hover:bg-primary-container disabled:opacity-50 rounded-full shadow-md active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
             >
               {submitting ? (
-                <span className="material-symbols-outlined animate-spin text-[18px]">refresh</span>
+                <Icon name="refresh" className="animate-spin text-[18px]" />
               ) : (
-                <span className="material-symbols-outlined text-[18px]">add</span>
+                <Icon name="add" className="text-[18px]" />
               )}
               <span>{submitting ? 'Saving...' : t('addJourneyBtn', 'Add Journey')}</span>
             </button>

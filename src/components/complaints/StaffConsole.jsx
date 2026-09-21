@@ -5,7 +5,8 @@ import Modal from '../common/Modal';
 import { complaintService } from '../../services/complaintService';
 import { attachmentService } from '../../services/attachmentService';
 import { ROLES, normalizeRole } from '../../constants/roles';
-
+
+import Icon from '../../components/common/Icon';
 /**
  * Shared complaint workspace for OFFICER and SENIOR_AUTHORITY.
  *
@@ -249,7 +250,7 @@ const StaffConsole = ({
       <div className="bg-surface-container-lowest dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-xl mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-colors">
         <div className="flex items-center gap-4">
           <span className="p-3 rounded-2xl bg-primary text-on-primary shadow-sm">
-            <span className="material-symbols-outlined text-[24px]">{icon}</span>
+            <Icon name={icon} className="text-[24px]" />
           </span>
           <div>
             <h1 className="text-xl md:text-2xl font-extrabold text-on-surface dark:text-white tracking-tight">
@@ -265,7 +266,7 @@ const StaffConsole = ({
           onClick={fetchComplaints}
           className="px-4 py-2.5 rounded-2xl bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 hover:border-primary text-on-surface dark:text-white font-extrabold text-xs active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
         >
-          <span className="material-symbols-outlined text-[18px] text-primary">refresh</span>
+          <Icon name="refresh" className="text-[18px] text-primary" />
           <span>{t('refreshBtn', 'Refresh')}</span>
         </button>
       </div>
@@ -286,7 +287,7 @@ const StaffConsole = ({
               <span className="text-xs font-bold text-on-surface-variant dark:text-slate-400 uppercase">
                 {kpi.label}
               </span>
-              <span className={`material-symbols-outlined text-[20px] ${kpi.tone}`}>{kpi.icon}</span>
+              <Icon name={kpi.icon} className={`text-[20px] ${kpi.tone}`} />
             </div>
             <p className="text-3xl font-black text-on-surface dark:text-white mt-2">{kpi.value}</p>
           </div>
@@ -334,7 +335,7 @@ const StaffConsole = ({
             {t('searchMatrix')}
           </label>
           <div className="relative flex items-center bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-xl px-3 py-1.5">
-            <span className="material-symbols-outlined text-outline dark:text-slate-400 text-[18px] mr-1.5">search</span>
+            <Icon name="search" className="text-outline dark:text-slate-400 text-[18px] mr-1.5" />
             <input
               type="text"
               value={searchQuery}
@@ -350,7 +351,7 @@ const StaffConsole = ({
       <div className="bg-surface-container-lowest dark:bg-slate-900 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-lg overflow-hidden transition-colors">
         <div className="px-6 py-4 border-b border-outline-variant/60 dark:border-slate-800 flex items-center justify-between">
           <h3 className="text-base font-extrabold text-on-surface dark:text-white flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-[20px]">table_chart</span>
+            <Icon name="table_chart" className="text-primary text-[20px]" />
             {t('complaintQueue', 'Complaint Queue')}
           </h3>
           <span className="text-xs font-bold text-on-surface-variant dark:text-slate-400 bg-surface-container-low dark:bg-slate-800 px-3 py-1 rounded-full">
@@ -380,7 +381,7 @@ const StaffConsole = ({
           </div>
         ) : ordered.length === 0 ? (
           <div className="p-10 text-center">
-            <span className="material-symbols-outlined text-4xl text-outline mb-3">inbox</span>
+            <Icon name="inbox" className="text-4xl text-outline mb-3" />
             <p className="text-sm font-bold text-on-surface dark:text-white">
               {t('noComplaintsInQueue', 'No complaints match the current filters.')}
             </p>
@@ -431,7 +432,7 @@ const StaffConsole = ({
                         onClick={() => openComplaint(c)}
                         className="px-3 py-1.5 rounded-full bg-primary text-on-primary font-bold hover:bg-primary-container transition-all shadow-xs inline-flex items-center gap-1 cursor-pointer"
                       >
-                        <span className="material-symbols-outlined text-[16px]">visibility</span>
+                        <Icon name="visibility" className="text-[16px]" />
                         <span>{t('openBtn', 'Open')}</span>
                       </button>
                     </td>
@@ -475,7 +476,7 @@ const StaffConsole = ({
 
             {detailLoading && (
               <div className="p-3 rounded-2xl bg-surface-container-low dark:bg-slate-800 text-xs font-bold text-on-surface-variant dark:text-slate-300 flex items-center gap-2">
-                <span className="material-symbols-outlined animate-spin text-[16px] text-primary">refresh</span>
+                <Icon name="refresh" className="animate-spin text-[16px] text-primary" />
                 {t('loadingDetail', 'Loading complaint details...')}
               </div>
             )}
@@ -484,7 +485,7 @@ const StaffConsole = ({
             {detail?.aiAnalysis?.processingStatus === 'SUCCESS' ? (
               <div className="p-4 rounded-2xl bg-surface-container-low dark:bg-slate-800 border border-outline-variant/60 dark:border-slate-700">
                 <h5 className="text-xs font-extrabold text-on-surface dark:text-white mb-2 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-[18px]">auto_awesome</span>
+                  <Icon name="auto_awesome" className="text-primary text-[18px]" />
                   {t('aiAnalysis', 'AI Analysis')}
                 </h5>
                 {detail.aiAnalysis.summary && (
@@ -532,7 +533,7 @@ const StaffConsole = ({
                       onClick={() => attachmentService.openInNewTab(a._id)}
                       className="text-[11px] text-primary font-bold flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-lowest dark:bg-slate-700 border border-outline-variant/60 dark:border-slate-600 hover:border-primary transition-colors cursor-pointer"
                     >
-                      <span className="material-symbols-outlined text-[16px]">attachment</span>
+                      <Icon name="attachment" className="text-[16px]" />
                       <span className="truncate max-w-[10rem]">{a.originalFilename}</span>
                     </button>
                   ))}
@@ -549,7 +550,7 @@ const StaffConsole = ({
             {detail && (detail.statusHistory || []).length > 0 && (
               <div className="p-4 rounded-2xl bg-surface-container-low dark:bg-slate-800 border border-outline-variant/60 dark:border-slate-700">
                 <h5 className="text-xs font-extrabold text-on-surface dark:text-white mb-2 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-[18px]">timeline</span>
+                  <Icon name="timeline" className="text-primary text-[18px]" />
                   {t('timelineLabel', 'Timeline')}
                 </h5>
                 <ol className="space-y-1.5">
@@ -627,9 +628,9 @@ const StaffConsole = ({
                     className="px-6 py-2.5 text-xs font-extrabold text-on-primary bg-primary hover:bg-primary-container disabled:opacity-50 rounded-full shadow-md active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
                   >
                     {updating ? (
-                      <span className="material-symbols-outlined animate-spin text-[18px]">refresh</span>
+                      <Icon name="refresh" className="animate-spin text-[18px]" />
                     ) : (
-                      <span className="material-symbols-outlined text-[18px]">save</span>
+                      <Icon name="save" className="text-[18px]" />
                     )}
                     <span>{updating ? t('savingWord', 'Saving...') : t('saveTelemetryBtn')}</span>
                   </button>
@@ -641,7 +642,7 @@ const StaffConsole = ({
                 triggers a transition. */}
             <div className="pt-4 border-t border-outline-variant/60 dark:border-slate-700">
               <h5 className="text-xs font-extrabold text-on-surface dark:text-white mb-3 flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-[18px]">forum</span>
+                <Icon name="forum" className="text-primary text-[18px]" />
                 {t('commentsLabel', 'Comments')} ({detail?.comments?.length || 0})
               </h5>
               <div className="space-y-2 max-h-40 overflow-y-auto mb-3">

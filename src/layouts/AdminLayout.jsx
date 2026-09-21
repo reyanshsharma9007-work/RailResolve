@@ -4,7 +4,8 @@ import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import useAuth from '../hooks/useAuth';
 import { ROLES, normalizeRole } from '../constants/roles';
-
+
+import Icon from '../components/common/Icon';
 /**
  * Shared chrome for every staff console. An ADMIN additionally gets a tab bar,
  * because administration is two jobs, not one: overseeing complaints and
@@ -26,7 +27,7 @@ const AdminLayout = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-margin py-3 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <span className="p-2 rounded-xl bg-primary text-on-primary font-bold shadow-xs">
-              <span className="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+              <Icon name="admin_panel_settings" className="text-[20px]" />
             </span>
             <div>
               <h2 className="text-sm font-extrabold text-on-surface dark:text-white tracking-tight leading-tight">
@@ -64,7 +65,7 @@ const AdminLayout = () => {
                     }`
                   }
                 >
-                  <span className="material-symbols-outlined text-[16px]">{tab.icon}</span>
+                  <Icon name={tab.icon} className="text-[16px]" />
                   {tab.label}
                 </NavLink>
               ))}

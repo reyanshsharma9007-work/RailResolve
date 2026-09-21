@@ -5,7 +5,8 @@ import StatusBadge from '../components/common/StatusBadge';
 import Modal from '../components/common/Modal';
 import { complaintService } from '../services/complaintService';
 import { attachmentService } from '../services/attachmentService';
-
+
+import Icon from '../components/common/Icon';
 const Complaint = () => {
   const [searchParams] = useSearchParams();
   const queryId = searchParams.get('id');
@@ -138,7 +139,7 @@ const Complaint = () => {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <span className="material-symbols-outlined animate-spin text-4xl text-primary mb-4">refresh</span>
+        <Icon name="refresh" className="animate-spin text-4xl text-primary mb-4" />
         <p className="text-on-surface dark:text-white font-bold text-sm">Loading grievance details...</p>
       </div>
     );
@@ -231,7 +232,7 @@ const Complaint = () => {
           <div className="px-4 py-2 rounded-2xl bg-orange-50 dark:bg-slate-800 border border-orange-200 dark:border-slate-700 text-left">
             <span className="text-[10px] font-bold text-on-surface-variant dark:text-slate-400 uppercase block">{t('guaranteedSlaTarget')}</span>
             <span className="text-sm font-black text-primary font-mono flex items-center gap-1">
-              <span className="material-symbols-outlined text-[16px]">timer</span>
+              <Icon name="timer" className="text-[16px]" />
               SLA Tracked
             </span>
           </div>
@@ -240,7 +241,7 @@ const Complaint = () => {
             onClick={() => setChatModalOpen(true)}
             className="px-5 py-3 rounded-2xl bg-primary hover:bg-primary-container text-on-primary font-extrabold text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
           >
-            <span className="material-symbols-outlined text-[18px]">chat</span>
+            <Icon name="chat" className="text-[18px]" />
             <span>{t('liveChatCaptain')}</span>
           </button>
         </div>
@@ -249,7 +250,7 @@ const Complaint = () => {
       {/* 5-Step Lifecycle Timeline Stepper */}
       <div className="bg-surface-container-lowest dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-lg mb-8 transition-colors">
         <h3 className="text-sm font-extrabold text-on-surface dark:text-white mb-6 flex items-center gap-2">
-          <span className="material-symbols-outlined text-primary text-[20px]">timeline</span>
+          <Icon name="timeline" className="text-primary text-[20px]" />
           {t('resolutionProgressLifecycle')}
         </h3>
 
@@ -296,7 +297,7 @@ const Complaint = () => {
         <div className="lg:col-span-8 space-y-6">
           <div className="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-sm transition-colors">
             <h3 className="text-sm font-extrabold text-on-surface dark:text-white mb-4 flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary text-[20px]">description</span>
+              <Icon name="description" className="text-primary text-[20px]" />
               {t('detailedDescEvidence')}
             </h3>
             <p className="text-xs text-on-surface-variant dark:text-slate-300 font-medium leading-relaxed mb-4">
@@ -314,7 +315,7 @@ const Complaint = () => {
                     onClick={() => attachmentService.openInNewTab(a._id)}
                     className="text-primary font-bold flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-lowest dark:bg-slate-700 border border-outline-variant/60 dark:border-slate-600 hover:border-primary transition-colors cursor-pointer"
                   >
-                    <span className="material-symbols-outlined text-[16px]">photo_library</span>
+                    <Icon name="photo_library" className="text-[16px]" />
                     <span className="truncate max-w-[10rem]">{a.originalFilename || t('viewPhotos')}</span>
                   </button>
                 ))}
@@ -328,7 +329,7 @@ const Complaint = () => {
           {aiAnalysis && aiAnalysis.processingStatus === 'SUCCESS' && (
             <div className="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-sm transition-colors">
               <h3 className="text-sm font-extrabold text-on-surface dark:text-white mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-[20px]">auto_awesome</span>
+                <Icon name="auto_awesome" className="text-primary text-[20px]" />
                 AI Analysis
               </h3>
               {aiAnalysis.summary && (
@@ -356,14 +357,14 @@ const Complaint = () => {
 
           {aiAnalysis && aiAnalysis.processingStatus === 'PENDING' && (
             <div className="bg-surface-container-low dark:bg-slate-800 p-4 rounded-2xl border border-outline-variant/60 dark:border-slate-700 text-xs font-bold text-on-surface-variant dark:text-slate-300 flex items-center gap-2">
-              <span className="material-symbols-outlined animate-spin text-[18px] text-primary">refresh</span>
+              <Icon name="refresh" className="animate-spin text-[18px] text-primary" />
               AI analysis in progress — refresh in a moment.
             </div>
           )}
 
           <div className="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-sm transition-colors">
             <h3 className="text-sm font-extrabold text-on-surface dark:text-white mb-4 flex items-center gap-2">
-              <span className="material-symbols-outlined text-support_agent text-[20px]">support_agent</span>
+              <Icon name="support_agent" className="text-primary text-[20px]" />
               {t('assignedCrewLog')}
             </h3>
             <div className="space-y-3 text-xs">
@@ -439,7 +440,7 @@ const Complaint = () => {
         <div className="lg:col-span-4 space-y-6">
           <div className="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/60 dark:border-slate-800 shadow-sm transition-colors">
             <h3 className="text-sm font-extrabold text-on-surface dark:text-white mb-4 flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary text-[20px]">train</span>
+              <Icon name="train" className="text-primary text-[20px]" />
               {t('journeyTelemetry')}
             </h3>
             <div className="space-y-3 text-xs">
@@ -457,7 +458,7 @@ const Complaint = () => {
 
           <div className="bg-orange-50 dark:bg-slate-900 border border-orange-200/80 dark:border-slate-800 p-6 rounded-3xl shadow-sm text-xs transition-colors">
             <h4 className="font-extrabold text-on-surface dark:text-white mb-2 flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">headset_mic</span>
+              <Icon name="headset_mic" className="text-primary" />
               {t('needEmergencyHelp')}
             </h4>
             <p className="text-on-surface-variant dark:text-slate-300 font-medium mb-3">
@@ -467,7 +468,7 @@ const Complaint = () => {
               href="tel:139"
               className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-full bg-primary text-on-primary font-extrabold shadow-sm hover:bg-primary-container transition-all"
             >
-              <span className="material-symbols-outlined text-[18px]">call</span>
+              <Icon name="call" className="text-[18px]" />
               <span>{t('dialRailMadad')}</span>
             </a>
           </div>

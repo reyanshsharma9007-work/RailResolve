@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-
+
+import Icon from './Icon';
 const Modal = ({ isOpen, onClose, title, children, maxWidth = 'max-w-2xl' }) => {
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -28,7 +29,7 @@ const Modal = ({ isOpen, onClose, title, children, maxWidth = 'max-w-2xl' }) => 
             onClick={onClose}
             className="p-1.5 rounded-full hover:bg-surface-container text-on-surface-variant transition-colors"
           >
-            <span className="material-symbols-outlined text-[20px]">close</span>
+            <Icon name="close" className="text-[20px]" />
           </button>
         </div>
         <div className="p-6 overflow-y-auto flex-1">

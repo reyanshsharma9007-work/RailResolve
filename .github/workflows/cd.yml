@@ -1,0 +1,40 @@
+name: RailResolve CD
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Kubernetes
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify Docker
+        run: docker --version
+
+      - name: Verify Kubernetes
+        run: kubectl version --client
+
+      - name: Verify cluster
+        run: kubectl get nodes
+
+      - name: Deploy RailResolve
+        run: kubectl apply -f k8s/
+
+      - name: Restart application deployments
+        run: |
+          kubectl rollout restart deployment railresolve-frontend -n railresolve
+          kubectl rollout restart deployment railresolve-express -n railresolve
+          kubectl rollout restart deployment railresolve-fastapi -n railresolve
+
+      - name: Wait for deployments
+        run: |
+          kubectl rollout status deployment/railresolve-frontend -n railresolve
+          kubectl rollout status deployment/railresolve-express -n railresolve
+          kubectl rollout status deployment/railresolve-fastapi -n railresolve
+
+      - name: Verify pods
+        run: kubectl get pods -n railresolve

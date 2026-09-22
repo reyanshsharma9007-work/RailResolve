@@ -59,7 +59,7 @@ jobs:
           docker push \
             ghcr.io/reyanshsharma9007-work/railresolve-fastapi:latest
 
-    deploy:
+  deploy:
     name: Deploy to Kubernetes
     runs-on: self-hosted
     needs: build-and-push

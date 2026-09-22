@@ -68,6 +68,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Add Kubernetes tools to PATH
+        shell: powershell
+        run: |
+          "C:\Users\dell\AppData\Local\Programs\DockerDesktop\resources\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
+
       - name: Verify Kubernetes
         run: kubectl version --client
 

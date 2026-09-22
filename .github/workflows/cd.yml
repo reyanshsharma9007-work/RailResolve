@@ -59,7 +59,7 @@ jobs:
           docker push \
             ghcr.io/reyanshsharma9007-work/railresolve-fastapi:latest
 
-  deploy:
+    deploy:
     name: Deploy to Kubernetes
     runs-on: self-hosted
     needs: build-and-push
@@ -68,31 +68,42 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Add Kubernetes tools to PATH
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: latest
+
+      - name: Verify kubectl
         shell: powershell
         run: |
-          "C:\Users\dell\AppData\Local\Programs\DockerDesktop\resources\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
-
-      - name: Verify Kubernetes
-        run: kubectl version --client
+          kubectl version --client
+          Get-Command kubectl
 
       - name: Verify cluster
-        run: kubectl get nodes
+        shell: powershell
+        run: |
+          kubectl get nodes
 
       - name: Deploy Kubernetes manifests
-        run: kubectl apply -f k8s/
+        shell: powershell
+        run: |
+          kubectl apply -f k8s/
 
       - name: Restart application deployments
+        shell: powershell
         run: |
           kubectl rollout restart deployment railresolve-frontend -n railresolve
           kubectl rollout restart deployment railresolve-express -n railresolve
           kubectl rollout restart deployment railresolve-fastapi -n railresolve
 
       - name: Wait for deployments
+        shell: powershell
         run: |
           kubectl rollout status deployment/railresolve-frontend -n railresolve
           kubectl rollout status deployment/railresolve-express -n railresolve
           kubectl rollout status deployment/railresolve-fastapi -n railresolve
 
       - name: Verify pods
-        run: kubectl get pods -n railresolve
+        shell: powershell
+        run: |
+          kubectl get pods -n railresolve

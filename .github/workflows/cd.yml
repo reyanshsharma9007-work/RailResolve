@@ -68,9 +68,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Verify Docker
-        run: docker --version
-
       - name: Verify Kubernetes
         run: kubectl version --client
 

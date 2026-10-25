@@ -10,7 +10,16 @@ const axios = require('axios');
 const ComplaintAiAnalysis = require('../source/models/complaintAiAnalysis.model');
 const { requestComplaintAnalysis } = require('../source/services/aiProcessing.service');
 
-beforeEach(() => jest.clearAllMocks());
+beforeEach(() => {
+  jest.clearAllMocks();
+  Complaint.find.mockReturnValue({
+    sort: () => ({
+      limit: () => ({
+        select: jest.fn().mockResolvedValue([]),
+      }),
+    }),
+  });
+});
 
 test('AI unavailable is recorded as FAILED and does not throw', async () => {
   ComplaintAiAnalysis.findOneAndUpdate.mockResolvedValue({});

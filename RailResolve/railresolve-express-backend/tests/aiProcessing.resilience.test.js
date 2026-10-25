@@ -46,5 +46,5 @@ test('malformed AI analysis response is recorded as FAILED without throwing', as
   axios.post.mockResolvedValue({ data: { success: true, analysis: null } });
   const result = await requestComplaintAnalysis({ _id: '507f1f77bcf86cd799439013', title: 'Delay', description: 'Train is late' });
   expect(result.status).toBe('FAILED');
-  expect(ComplaintAiAnalysis.findOneAndUpdate.mock.calls[1][1].failureReason).toBe('AI analysis unavailable');
+  expect(ComplaintAiAnalysis.findOneAndUpdate.mock.calls[1][1].$set.failureReason).toBe('AI analysis unavailable');
 });

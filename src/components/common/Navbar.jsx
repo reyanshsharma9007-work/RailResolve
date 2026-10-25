@@ -29,7 +29,9 @@ const Navbar = () => {
     try {
       await notificationService.markAllAsRead();
       setNotifications(notifications.map(n => ({ ...n, isRead: true })));
-    } catch (err) {}
+    } catch (err) {
+      console.error("Failed to mark notifications as read", err);
+    }
   };
 
   // Navigation is derived from the authenticated role, so an officer never sees

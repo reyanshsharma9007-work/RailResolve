@@ -7,6 +7,7 @@ jest.mock('../source/models/complaintAiAnalysis.model', () => ({ findOneAndUpdat
 jest.mock('../source/services/sla.service', () => ({ computeDueAt: jest.fn().mockResolvedValue(new Date()) }));
 
 const axios = require('axios');
+const Complaint = require('../source/models/complaint.model');
 const ComplaintAiAnalysis = require('../source/models/complaintAiAnalysis.model');
 const { requestComplaintAnalysis } = require('../source/services/aiProcessing.service');
 

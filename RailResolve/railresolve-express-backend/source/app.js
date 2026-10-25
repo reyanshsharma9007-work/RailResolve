@@ -21,6 +21,7 @@ const attachmentRoutes = require('./routers/attachment.routes');
 const notificationRoutes = require('./routers/notification.routes');
 const adminRoutes = require('./routers/admin.routes');
 const referenceRoutes = require('./routers/reference.routes');
+const aiRoutes = require('./routers/ai.routes');
 
 const app = express();
 
@@ -52,6 +53,7 @@ app.use('/api/attachments', attachmentRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/reference', referenceRoutes);
+app.use('/api/ai', aiRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

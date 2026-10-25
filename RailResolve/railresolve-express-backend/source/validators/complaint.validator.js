@@ -5,11 +5,11 @@
 // those require database lookups, not just shape validation.
 
 const mongoose = require('mongoose');
-const { DEPARTMENT_CODE_VALUES, COMPLAINT_STATUS_VALUES } = require('../config/constants');
+const { DEPARTMENT_CODE_VALUES, COMPLAINT_STATUS_VALUES, PRIORITY_VALUES } = require('../config/constants');
 
 function validateCreateComplaintPayload(body) {
   const errors = [];
-  const { journeyId, departmentCode, category, title, description, incidentDateTime } = body;
+  const { journeyId, departmentCode, category, title, description, incidentDateTime, priority } = body;
 
   if (!journeyId || !mongoose.Types.ObjectId.isValid(journeyId)) {
     errors.push('A valid journeyId is required');
@@ -26,6 +26,7 @@ function validateCreateComplaintPayload(body) {
   if (!description || typeof description !== 'string' || description.trim().length < 10) {
     errors.push('description must be at least 10 characters long');
   }
+  if (priority !== undefined && priority !== null && !PRIORITY_VALUES.includes(priority)) errors.push(`priority must be one of: ${PRIORITY_VALUES.join(', ')}`);
   if (!incidentDateTime || isNaN(Date.parse(incidentDateTime))) {
     errors.push('A valid incidentDateTime is required');
   }

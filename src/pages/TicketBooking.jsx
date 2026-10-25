@@ -5,7 +5,8 @@ import StatusBadge from '../components/common/StatusBadge';
 import AddJourneyModal from '../components/common/AddJourneyModal';
 import { journeyService } from '../services/journeyService';
 import { complaintService } from '../services/complaintService';
-
+
+
 import Icon from '../components/common/Icon';
 const TicketBooking = () => {
   const { user, t } = useAuth();
@@ -27,7 +28,7 @@ const TicketBooking = () => {
           journeyService.getAll(),
           complaintService.getAll()
         ]);
-        
+
         if (journeysRes.success) setJourneys(journeysRes.data.journeys || []);
         if (complaintsRes.success) setComplaints(complaintsRes.data.complaints || []);
       } catch (err) {
@@ -37,7 +38,7 @@ const TicketBooking = () => {
         setLoading(false);
       }
     };
-    
+
     fetchData();
   }, []);
 
@@ -88,6 +89,12 @@ const TicketBooking = () => {
           >
             <Icon name="report_problem" className="text-[18px]" />
             <span>{t('reportOnboardGrievanceBtn')}</span>
+          </button>
+          <button type="button" onClick={() => navigate('/assistant')} className="px-5 py-3 rounded-2xl bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 text-on-surface dark:text-white font-extrabold text-xs">
+            AI Assistant
+          </button>
+          <button type="button" onClick={() => navigate('/ticket-scanner')} className="px-5 py-3 rounded-2xl bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 text-on-surface dark:text-white font-extrabold text-xs">
+            Scan Ticket
           </button>
         </div>
       </div>

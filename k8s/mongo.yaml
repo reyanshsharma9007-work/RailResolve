@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mongo-pvc
+  namespace: railresolve
 spec:
   accessModes:
     - ReadWriteOnce
@@ -14,6 +15,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: railresolve-mongo
+  namespace: railresolve
 spec:
   replicas: 1
   selector:
@@ -75,6 +77,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: railresolve-mongo
+  namespace: railresolve
 spec:
   selector:
     app: railresolve-mongo

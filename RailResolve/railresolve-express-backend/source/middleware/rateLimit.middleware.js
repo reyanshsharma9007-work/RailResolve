@@ -34,4 +34,20 @@ const uploadRateLimiter = buildLimiter(
   'Too many file uploads in a short period. Please try again later.'
 );
 
-module.exports = { authRateLimiter, complaintCreationRateLimiter, uploadRateLimiter };
+const aiRateLimiter = buildLimiter(
+  env.AI_RATE_LIMIT_MAX,
+  'Too many AI requests in a short period. Please try again later.'
+);
+
+const ticketScanRateLimiter = buildLimiter(
+  env.TICKET_SCAN_RATE_LIMIT_MAX,
+  'Too many ticket scans in a short period. Please try again later.'
+);
+
+module.exports = {
+  authRateLimiter,
+  complaintCreationRateLimiter,
+  uploadRateLimiter,
+  aiRateLimiter,
+  ticketScanRateLimiter,
+};

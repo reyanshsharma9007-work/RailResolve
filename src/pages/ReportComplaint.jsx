@@ -6,7 +6,9 @@ import { journeyService } from '../services/journeyService';
 import { referenceService } from '../services/referenceService';
 import { complaintService } from '../services/complaintService';
 import { attachmentService } from '../services/attachmentService';
-
+import { aiService } from '../services/aiService';
+
+
 import Icon from '../components/common/Icon';
 const ReportComplaint = () => {
   const [searchParams] = useSearchParams();
@@ -28,6 +30,8 @@ const ReportComplaint = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [journeyModalOpen, setJourneyModalOpen] = useState(false);
+  const [aiSuggestion, setAiSuggestion] = useState(null);
+  const [aiLoading, setAiLoading] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -60,6 +64,22 @@ const ReportComplaint = () => {
     }
   }, [departmentCode, permittedCategories, category]);
 
+  const getAISuggestion = async () => {
+    if (!title || description.length < 10) {
+      setError('Enter an issue headline and at least 10 characters of description first.');
+      return;
+    }
+    setAiLoading(true);
+    try {
+      const res = await aiService.analyzePreview({ title, description, category, department: departmentCode });
+      setAiSuggestion(res.data?.analysis || null);
+    } catch (err) {
+      setError(err.message || 'AI suggestion is currently unavailable.');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!journeyId || !departmentCode || !category || !title || !description) {
@@ -82,10 +102,10 @@ const ReportComplaint = () => {
       };
 
       const res = await complaintService.create(payload);
-      
+
       if (res.success) {
         const complaintId = res.data.complaint._id || res.data.complaint.id;
-        
+
         // If there is an attachment, upload it
         if (photo) {
           try {
@@ -95,7 +115,7 @@ const ReportComplaint = () => {
             // Optionally notify user that complaint was created but attachment failed
           }
         }
-        
+
         navigate(`/track?id=${complaintId}`);
       }
     } catch (err) {
@@ -155,7 +175,7 @@ const ReportComplaint = () => {
               {error}
             </div>
           )}
-          
+
           <div>
             <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">Select Journey</label>
             <select
@@ -229,6 +249,25 @@ const ReportComplaint = () => {
               className="w-full bg-surface-container-low dark:bg-slate-800 border border-outline-variant/80 dark:border-slate-700 rounded-2xl p-4 text-xs font-semibold text-on-surface dark:text-white focus:outline-none focus:border-primary transition-all"
             ></textarea>
           </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <button type="button" onClick={getAISuggestion} disabled={aiLoading}
+              className="px-4 py-2.5 rounded-xl border border-primary text-primary font-extrabold text-xs disabled:opacity-50">
+              {aiLoading ? 'Analyzing…' : 'Get AI suggestions'}
+            </button>
+            <span className="text-[11px] text-on-surface-variant dark:text-slate-400">AI suggestions do not override the final server-side decision.</span>
+          </div>
+          {aiSuggestion && (
+            <div className="bg-primary-fixed/40 dark:bg-orange-950/30 border border-primary/30 rounded-2xl p-4 text-xs">
+              <p className="font-extrabold text-on-surface dark:text-white mb-2">AI suggestion · RULE_BASED</p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 dark:text-slate-200">
+                <span>Category: <b>{aiSuggestion.classification?.category || 'Human review'}</b></span>
+                <span>Priority: <b>{aiSuggestion.priority?.recommendedPriority || 'MEDIUM'}</b></span>
+                <span>Duplicate: <b>{aiSuggestion.duplicate?.isDuplicate ? 'Possible match' : 'No strong match'}</b></span>
+              </div>
+              <p className="mt-2 text-on-surface-variant dark:text-slate-400">{aiSuggestion.summary}</p>
+            </div>
+          )}
 
           <div>
             <label className="text-xs font-bold text-on-surface dark:text-slate-200 block mb-1.5">{t('uploadPhotoLabel')}</label>

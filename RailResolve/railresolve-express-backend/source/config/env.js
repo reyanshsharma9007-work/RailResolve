@@ -19,13 +19,13 @@ const env = {
 
   MONGODB_URI: required('MONGODB_URI', 'mongodb://localhost:27017/railresolve'),
 
-  JWT_SECRET: required('JWT_SECRET', 'dev_only_insecure_secret_change_me'),
+  JWT_SECRET: required('JWT_SECRET'),
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '24h',
 
   BCRYPT_SALT_ROUNDS: parseInt(process.env.BCRYPT_SALT_ROUNDS || '10', 10),
 
   FASTAPI_URL: process.env.FASTAPI_URL || 'http://localhost:8000',
-  INTERNAL_SERVICE_TOKEN: process.env.INTERNAL_SERVICE_TOKEN || 'dev_only_internal_token',
+  INTERNAL_SERVICE_TOKEN: required('INTERNAL_SERVICE_TOKEN'),
   FASTAPI_REQUEST_TIMEOUT_MS: parseInt(process.env.FASTAPI_REQUEST_TIMEOUT_MS || '8000', 10),
 
   CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
@@ -37,6 +37,8 @@ const env = {
   AUTH_RATE_LIMIT_MAX: parseInt(process.env.AUTH_RATE_LIMIT_MAX || '10', 10),
   COMPLAINT_RATE_LIMIT_MAX: parseInt(process.env.COMPLAINT_RATE_LIMIT_MAX || '30', 10),
   UPLOAD_RATE_LIMIT_MAX: parseInt(process.env.UPLOAD_RATE_LIMIT_MAX || '20', 10),
+  AI_RATE_LIMIT_MAX: parseInt(process.env.AI_RATE_LIMIT_MAX || '30', 10),
+  TICKET_SCAN_RATE_LIMIT_MAX: parseInt(process.env.TICKET_SCAN_RATE_LIMIT_MAX || '10', 10),
 
   LOG_LEVEL: process.env.LOG_LEVEL || 'info',
 

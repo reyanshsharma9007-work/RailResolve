@@ -4,6 +4,7 @@
 # os.environ directly, mirroring the Express side's config/env.js pattern.
 
 from functools import lru_cache
+from typing import Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -13,7 +14,7 @@ class Settings(BaseSettings):
     PORT: int = 8000
     ENVIRONMENT: str = "development"
 
-    INTERNAL_SERVICE_TOKEN: str = "dev_only_internal_token"
+    INTERNAL_SERVICE_TOKEN: str
 
     LLM_BASE_URL: str = "https://api.llm-provider.com/v1"
     LLM_API_KEY: str = ""
@@ -23,6 +24,17 @@ class Settings(BaseSettings):
 
     ALLOWED_ORIGIN: str = "http://localhost:5000"
 
+    # Trained complaint-category model (TF-IDF + LinearSVC). Relative paths resolve
+    # against the FastAPI backend root. Missing/corrupt artifacts => rule-based fallback.
+    CATEGORY_MODEL_ENABLED: bool = True
+    CATEGORY_MODEL_DIR: str = "models/category"
+    CATEGORY_MIN_CONFIDENCE: Optional[float] = None  # None => use value stored with the model
+
+    # Model 2 (priority/urgency). Independent of the category settings above.
+    PRIORITY_MODEL_ENABLED: bool = True
+    PRIORITY_MODEL_DIR: str = "artifacts/priority"
+
+    DUPLICATE_THRESHOLD: float = 0.72
     LOG_LEVEL: str = "INFO"
 
     @property

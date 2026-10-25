@@ -1,0 +1,146 @@
+{
+  "model_name": "railresolve-priority",
+  "model_version": "priority-1.0.0",
+  "target_column": "urgency",
+  "input_text_field": "english_gloss",
+  "labels": [
+    "high",
+    "low",
+    "medium"
+  ],
+  "label_note": "Labels are exactly those present in CivicDex (low/medium/high). The model never predicts CRITICAL.",
+  "algorithm": {
+    "classifier": "logreg",
+    "features": "word12",
+    "class_weight": "balanced",
+    "C": 3.0,
+    "calibrated": true
+  },
+  "probability_supported": true,
+  "probability_kind": "calibrated_sigmoid",
+  "preprocessing": {
+    "function": "app.ml.priority_text.normalize_priority_text",
+    "steps": "lowercase; strip URLs/e-mails/@mentions/HTML entities/punctuation; keep digits and unicode letters; collapse whitespace; title+description joined by a space",
+    "tfidf_token_pattern": "(?u)\\b\\w+\\b",
+    "stop_words_removed": false
+  },
+  "artifact": {
+    "file": "priority-1.0.0.joblib",
+    "sha256": "170a895351fa2b3e675c0d93ebb720dc8e0b7ec01c472445aeea6eeea57c5c5f"
+  },
+  "dataset": {
+    "name": "CivicDex (JadeSamLee/civicdex)",
+    "variant_used": "civicdex_main.csv (official 600 rows)",
+    "files": {
+      "main": {
+        "name": "civicdex_main.csv",
+        "sha256": "b75934af682fe2275b1147cbdde3bc8b2c3411f685b988ec5ca5a127472f5467"
+      },
+      "adapted": {
+        "name": "civicdex_adapted.csv",
+        "sha256": "bfc4d897bcc6b096571e901d829aa9dbb96048743c693e23b6e8894776307cf1"
+      }
+    },
+    "license": "NOT VERIFIED (no network access when trained) - confirm before commercial use",
+    "cleaning": {
+      "input_rows": 600,
+      "dropped_missing_or_invalid": 0,
+      "dropped_conflicting_label_duplicates": 0,
+      "dropped_exact_duplicates_in_pool": 36,
+      "test_rows_total": 60,
+      "test_rows_leaking_from_train_val": 8,
+      "rows_kept": 564,
+      "kept_by_split": {
+        "test": 60,
+        "train": 453,
+        "val": 51
+      },
+      "kept_label_distribution": {
+        "test": {
+          "high": 34,
+          "low": 6,
+          "medium": 20
+        },
+        "train": {
+          "high": 192,
+          "low": 67,
+          "medium": 194
+        },
+        "val": {
+          "high": 25,
+          "low": 5,
+          "medium": 21
+        }
+      }
+    }
+  },
+  "split_strategy": {
+    "official_split_column": "train/val/test respected; test never used for selection or fitting",
+    "selection": "5-fold StratifiedGroupKFold x seeds [42, 43, 44] on train+val, group = normalised text",
+    "final_fit": "all kept train+val rows",
+    "random_seed": 42,
+    "pool_rows": 504,
+    "pool_label_distribution": {
+      "high": 217,
+      "medium": 215,
+      "low": 72
+    }
+  },
+  "trained_at": "2026-10-25T05:18:20.490701+00:00",
+  "cv_selection": {
+    "best_logreg": {
+      "model": "logreg",
+      "features": "word12",
+      "class_weight": "balanced",
+      "C": 3.0,
+      "macro_f1_mean": 0.81,
+      "macro_f1_std": 0.0026
+    },
+    "best_linear_svm": {
+      "model": "linear_svm",
+      "features": "word12",
+      "class_weight": "balanced",
+      "C": 1.0,
+      "macro_f1_mean": 0.8087,
+      "macro_f1_std": 0.0016
+    },
+    "chosen": {
+      "model": "logreg",
+      "features": "word12",
+      "class_weight": "balanced",
+      "C": 3.0,
+      "calibrate": true
+    },
+    "rule": "higher CV macro-F1; prefer logistic regression (native probabilities) unless the SVM wins by >0.01"
+  },
+  "env": {
+    "python": "3.12.3",
+    "scikit_learn": "1.8.0",
+    "numpy": "2.4.4",
+    "scipy": "1.17.1",
+    "joblib": "1.5.3"
+  },
+  "evaluation": {
+    "split": "official CivicDex test (n=60)",
+    "accuracy": 0.75,
+    "macro_f1": 0.7666,
+    "weighted_f1": 0.7618,
+    "per_class_recall": {
+      "low": 0.6667,
+      "medium": 0.9,
+      "high": 0.6765
+    },
+    "macro_f1_95ci": [
+      0.57,
+      0.877
+    ],
+    "report": "training/reports/priority_evaluation.md"
+  },
+  "limitations": [
+    "Trained on Chennai civic-service requests (English glosses), NOT railway complaints.",
+    "~90% of rows are synthetic or synthetic_realistic (only ~10% real); only three urgency classes, no CRITICAL.",
+    "Very small data (a few hundred rows; ~70 'low' examples): metrics are high-variance.",
+    "Training inputs are ~29-character glosses; production inputs are longer title+description text.",
+    "Offline metrics do not establish safety. Explicit railway safety rules must keep overriding this model."
+  ]
+}

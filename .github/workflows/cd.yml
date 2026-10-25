@@ -87,6 +87,29 @@ jobs:
         run: |
           kubectl get nodes
 
+      - name: Ensure RailResolve namespace
+        shell: powershell
+        run: |
+          kubectl apply -f k8s/namespace.yaml
+
+      - name: Create deployment secret
+        shell: powershell
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          INTERNAL_SERVICE_TOKEN: ${{ secrets.INTERNAL_SERVICE_TOKEN }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          CLIENT_ORIGIN: ${{ secrets.CLIENT_ORIGIN }}
+        run: |
+          if (-not $env:JWT_SECRET -or -not $env:INTERNAL_SERVICE_TOKEN -or -not $env:MONGODB_URI) {
+            throw "JWT_SECRET, INTERNAL_SERVICE_TOKEN and MONGODB_URI GitHub Secrets are required for Kubernetes deployment."
+          }
+          kubectl create secret generic railresolve-secret -n railresolve `
+            --from-literal=JWT_SECRET="$env:JWT_SECRET" `
+            --from-literal=INTERNAL_SERVICE_TOKEN="$env:INTERNAL_SERVICE_TOKEN" `
+            --from-literal=MONGODB_URI="$env:MONGODB_URI" `
+            --from-literal=CLIENT_ORIGIN="$env:CLIENT_ORIGIN" `
+            --dry-run=client -o yaml | kubectl apply -f -
+
       - name: Deploy Kubernetes manifests
         shell: powershell
         run: |

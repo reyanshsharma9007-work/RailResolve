@@ -20,6 +20,8 @@ import AuthorityConsole from '../pages/AuthorityConsole';
 import Complaint from '../pages/Complaint';
 import ReportComplaint from '../pages/ReportComplaint';
 import TicketBooking from '../pages/TicketBooking';
+import AIAssistant from '../pages/AIAssistant';
+import TicketScanner from '../pages/TicketScanner';
 
 const AppRoutes = () => {
   return (
@@ -55,6 +57,8 @@ const AppRoutes = () => {
         <Route path="/passenger" element={<TicketBooking />} />
         <Route path="/tickets" element={<TicketBooking />} />
         <Route path="/report" element={<ReportComplaint />} />
+        <Route path="/assistant" element={<AIAssistant />} />
+        <Route path="/ticket-scanner" element={<TicketScanner />} />
       </Route>
 
       {/* Officer */}

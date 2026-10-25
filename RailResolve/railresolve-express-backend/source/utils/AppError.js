@@ -36,6 +36,10 @@ class AppError extends Error {
   static tooManyRequests(message = 'Too many requests, please try again later', errorCode = 'RATE_LIMITED') {
     return new AppError(message, 429, errorCode);
   }
+
+  static serviceUnavailable(message = 'Service temporarily unavailable', errorCode = 'SERVICE_UNAVAILABLE') {
+    return new AppError(message, 503, errorCode);
+  }
 }
 
 module.exports = AppError;

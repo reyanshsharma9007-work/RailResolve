@@ -14,6 +14,7 @@ const Department = require('../models/department.model');
 const User = require('../models/user.model');
 const generateReferenceNumber = require('../utils/generateReferenceNumber');
 const { computeDueAt } = require('./sla.service');
+const { computeFinalPriority } = require('./priority.service');
 const { recordAuditEvent } = require('./audit.service');
 const { notifyUser, notifyManyUsers } = require('./notification.service');
 const {
@@ -56,7 +57,9 @@ async function createComplaint(passenger, payload) {
     );
   }
 
-  const effectivePriority = priority && Object.values(PRIORITY).includes(priority) ? priority : PRIORITY.MEDIUM;
+  const passengerSubmittedPriority = priority && Object.values(PRIORITY).includes(priority) ? priority : null;
+  const priorityDecision = computeFinalPriority({ title, description, aiRecommendedPriority: null });
+  const effectivePriority = priorityDecision.finalPriority;
   const referenceNumber = await generateReferenceNumber();
   const dueAt = await computeDueAt(effectivePriority);
 
@@ -73,7 +76,13 @@ async function createComplaint(passenger, payload) {
     seat: journey.seat,
     stationId: journey.boardingStationId,
     incidentDateTime,
+    passengerSubmittedPriority,
+    aiRecommendedPriority: null,
+    finalPriority: effectivePriority,
     priority: effectivePriority,
+    prioritySource: priorityDecision.prioritySource,
+    priorityOverrideReason: priorityDecision.priorityOverrideReason,
+    priorityHumanReviewRequired: priorityDecision.humanReviewRequired,
     status: COMPLAINT_STATUS.SUBMITTED,
     sla: { dueAt, overdue: false },
   });
@@ -198,6 +207,14 @@ async function assignComplaintToOfficer({ complaint, officerId, actor, ipAddress
  * opposed to the automatic SLA-breach escalation in sla.job.js).
  */
 async function escalateComplaint({ complaint, actor, note, ipAddress = null }) {
+  const priorityDecision = computeFinalPriority({
+    title: complaint.title,
+    description: complaint.description,
+    aiRecommendedPriority: complaint.aiRecommendedPriority,
+    humanEscalationApproved: true,
+  });
+  const priorityChanged = complaint.finalPriority !== priorityDecision.finalPriority;
+
   await transitionStatus({
     complaint,
     toStatus: COMPLAINT_STATUS.ESCALATED,
@@ -207,14 +224,39 @@ async function escalateComplaint({ complaint, actor, note, ipAddress = null }) {
   });
 
   complaint.sla.overdue = true;
+  complaint.finalPriority = priorityDecision.finalPriority;
+  complaint.priority = priorityDecision.finalPriority;
+  complaint.prioritySource = priorityDecision.prioritySource;
+  complaint.priorityOverrideReason = priorityDecision.priorityOverrideReason;
+  complaint.priorityHumanReviewRequired = priorityDecision.humanReviewRequired;
+  if (priorityChanged) {
+    complaint.sla.dueAt = await computeDueAt(priorityDecision.finalPriority);
+    complaint.sla.overdue = false;
+  }
   await complaint.save();
+
+  // Keep the persisted AI analysis consistent with the authoritative
+  // priority decision, if analysis exists.
+  await require('../models/complaintAiAnalysis.model').findOneAndUpdate(
+    { complaintId: complaint._id },
+    {
+      finalPriority: priorityDecision.finalPriority,
+      finalPrioritySource: priorityDecision.prioritySource,
+      finalPriorityReason: priorityDecision.priorityOverrideReason,
+    }
+  ).catch(() => {});
 
   await recordAuditEvent({
     actorUserId: actor._id,
     action: AUDIT_ACTIONS.COMPLAINT_ESCALATED,
     entityType: AUDIT_ENTITY_TYPES.COMPLAINT,
     entityId: complaint._id,
-    newValue: { note },
+    newValue: {
+      note,
+      finalPriority: priorityDecision.finalPriority,
+      prioritySource: priorityDecision.prioritySource,
+      priorityChanged,
+    },
     ipAddress,
   });
 

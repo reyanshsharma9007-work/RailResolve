@@ -1,0 +1,12 @@
+node_modules
+dist
+.git
+.kilo
+RailResolve/railresolve-fastapi-backend/.venv
+**/__pycache__
+**/*.pyc
+datasets/raw
+datasets/processed
+.env
+.env.*
+*.log

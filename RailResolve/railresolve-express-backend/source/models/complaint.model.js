@@ -32,7 +32,13 @@ const complaintSchema = new mongoose.Schema(
 
     incidentDateTime: { type: Date, required: true },
 
+    passengerSubmittedPriority: { type: String, enum: [...PRIORITY_VALUES, null], default: null },
+    aiRecommendedPriority: { type: String, enum: [...PRIORITY_VALUES, null], default: null },
+    finalPriority: { type: String, enum: PRIORITY_VALUES, default: PRIORITY.MEDIUM, index: true },
     priority: { type: String, enum: PRIORITY_VALUES, default: PRIORITY.MEDIUM },
+    prioritySource: { type: String, default: 'DEFAULT' },
+    priorityOverrideReason: { type: String, default: null },
+    priorityHumanReviewRequired: { type: Boolean, default: false },
     status: {
       type: String,
       enum: COMPLAINT_STATUS_VALUES,

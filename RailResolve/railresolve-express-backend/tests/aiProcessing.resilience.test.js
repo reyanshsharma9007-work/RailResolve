@@ -28,8 +28,8 @@ test('AI unavailable is recorded as FAILED and does not throw', async () => {
   const result = await requestComplaintAnalysis({ _id: '507f1f77bcf86cd799439011', title: 'Delay', description: 'Train is late' });
   expect(result.status).toBe('FAILED');
   expect(ComplaintAiAnalysis.findOneAndUpdate).toHaveBeenCalledTimes(2);
-  expect(ComplaintAiAnalysis.findOneAndUpdate.mock.calls[0][1].processingStatus).toBe('PENDING');
-  expect(ComplaintAiAnalysis.findOneAndUpdate.mock.calls[1][1].processingStatus).toBe('FAILED');
+  expect(ComplaintAiAnalysis.findOneAndUpdate.mock.calls[0][1].$set.processingStatus).toBe('PENDING');
+  expect(ComplaintAiAnalysis.findOneAndUpdate.mock.calls[1][1].$set.processingStatus).toBe('FAILED');
 });
 
 
@@ -38,7 +38,7 @@ test('AI timeout is recorded as FAILED without throwing', async () => {
   axios.post.mockRejectedValue(Object.assign(new Error('timeout'), { code: 'ECONNABORTED' }));
   const result = await requestComplaintAnalysis({ _id: '507f1f77bcf86cd799439012', title: 'Delay', description: 'Train is late' });
   expect(result.status).toBe('FAILED');
-  expect(ComplaintAiAnalysis.findOneAndUpdate.mock.calls[1][1].failureReason).toBe('TIMEOUT');
+  expect(ComplaintAiAnalysis.findOneAndUpdate.mock.calls[1][1].$set.failureReason).toBe('TIMEOUT');
 });
 
 test('malformed AI analysis response is recorded as FAILED without throwing', async () => {

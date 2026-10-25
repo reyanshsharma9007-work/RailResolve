@@ -1,0 +1,61 @@
+{
+  "model_version": "category-svm-1.0.0",
+  "trained_at": "2026-10-24T14:46:25.776969+00:00",
+  "classes": [
+    "BOOKING_REFUND",
+    "FOOD_WATER",
+    "GENERAL_SUPPORT",
+    "STATION_MAINTENANCE",
+    "TICKET_TTE",
+    "TRAIN_MAINTENANCE",
+    "TRAIN_OPERATIONS"
+  ],
+  "artifacts": {
+    "vectorizer": "tfidf_vectorizer.joblib",
+    "classifier": "category_clf.joblib",
+    "calibrator": "margin_calibrator.joblib"
+  },
+  "artifact_sha256": {
+    "vectorizer": "4e49eea5ccb1d5c991c037470686e0df2641e74801bc043ca9e7f91b9a505d6d",
+    "classifier": "6a0077e0aae6059d64b800007edd881411d6b4c038ef0980cac2d9ee33c66d17",
+    "calibrator": "256f79370287f3cfcf7866af0c5f024e7a41195557d2f5abd8e417574eadaa21"
+  },
+  "dataset": {
+    "file": "inidian_railway_complaint_tweets__1_.csv",
+    "sha256": "cf8fb6b9743e7cfdb51d26358149799cc1719770e89979992de2dfe5c9ad891c",
+    "raw_rows": 4535,
+    "complaint_rows": 2615,
+    "distinct_raw_types_in_complaints": 43,
+    "dropped_conflicting_duplicate_texts": 5,
+    "dropped_exact_duplicates": 79,
+    "final_rows": 2531
+  },
+  "splits": {
+    "train": 2024,
+    "val": 253,
+    "test": 254
+  },
+  "split_ratio": "80/10/10 stratified",
+  "random_state": 42,
+  "selected_config": {
+    "ngram": [
+      1,
+      2
+    ],
+    "class_weight": "balanced",
+    "C": 0.3,
+    "val_macro_f1": 0.6251,
+    "val_accuracy": 0.668
+  },
+  "recommended_min_confidence": 0.5,
+  "env": {
+    "python": "3.12.3",
+    "scikit_learn": "1.8.0",
+    "numpy": "2.4.4"
+  },
+  "caveats": [
+    "Labels derive from a noisy raw 'Type' column mapped by hand (training/category_label_map.py).",
+    "STATION_MAINTENANCE labels are rule-derived (weak supervision) and have very few examples.",
+    "Trained on tweets; production inputs are form submissions (title + description)."
+  ]
+}

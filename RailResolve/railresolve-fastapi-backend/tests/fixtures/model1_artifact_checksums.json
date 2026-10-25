@@ -1,0 +1,6 @@
+{
+  "category_clf.joblib": "6a0077e0aae6059d64b800007edd881411d6b4c038ef0980cac2d9ee33c66d17",
+  "margin_calibrator.joblib": "256f79370287f3cfcf7866af0c5f024e7a41195557d2f5abd8e417574eadaa21",
+  "metadata.json": "52ba18bfb1c13accbf803e483eda03da5b6bcea8f36c3b70718d59b95b364837",
+  "tfidf_vectorizer.joblib": "4e49eea5ccb1d5c991c037470686e0df2641e74801bc043ca9e7f91b9a505d6d"
+}

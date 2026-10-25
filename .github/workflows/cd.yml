@@ -1,0 +1,135 @@
+name: RailResolve CD
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - Reyansh
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-push:
+    name: Build & Push Docker Images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Build Frontend
+        run: |
+          docker build \
+            -t ghcr.io/reyanshsharma9007-work/railresolve-frontend:latest \
+            .
+
+      - name: Push Frontend
+        run: |
+          docker push \
+            ghcr.io/reyanshsharma9007-work/railresolve-frontend:latest
+
+      - name: Build Express Backend
+        run: |
+          docker build \
+            -t ghcr.io/reyanshsharma9007-work/railresolve-express:latest \
+            ./RailResolve/railresolve-express-backend
+
+      - name: Push Express Backend
+        run: |
+          docker push \
+            ghcr.io/reyanshsharma9007-work/railresolve-express:latest
+
+      - name: Build FastAPI Backend
+        run: |
+          docker build \
+            -t ghcr.io/reyanshsharma9007-work/railresolve-fastapi:latest \
+            ./RailResolve/railresolve-fastapi-backend
+
+      - name: Push FastAPI Backend
+        run: |
+          docker push \
+            ghcr.io/reyanshsharma9007-work/railresolve-fastapi:latest
+
+  deploy:
+    name: Deploy to Kubernetes
+    runs-on: self-hosted
+    needs: build-and-push
+
+    env:
+      KUBECONFIG: C:\Users\dell\.kube\config
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: latest
+
+      - name: Verify kubectl
+        shell: powershell
+        run: |
+          kubectl version --client
+          Get-Command kubectl
+
+      - name: Verify cluster
+        shell: powershell
+        run: |
+          kubectl get nodes
+
+      - name: Ensure RailResolve namespace
+        shell: powershell
+        run: |
+          kubectl apply -f k8s/namespace.yaml
+
+      - name: Create deployment secret
+        shell: powershell
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          INTERNAL_SERVICE_TOKEN: ${{ secrets.INTERNAL_SERVICE_TOKEN }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          CLIENT_ORIGIN: ${{ secrets.CLIENT_ORIGIN }}
+        run: |
+          if (-not $env:JWT_SECRET -or -not $env:INTERNAL_SERVICE_TOKEN -or -not $env:MONGODB_URI) {
+            throw "JWT_SECRET, INTERNAL_SERVICE_TOKEN and MONGODB_URI GitHub Secrets are required for Kubernetes deployment."
+          }
+          kubectl create secret generic railresolve-secret -n railresolve `
+            --from-literal=JWT_SECRET="$env:JWT_SECRET" `
+            --from-literal=INTERNAL_SERVICE_TOKEN="$env:INTERNAL_SERVICE_TOKEN" `
+            --from-literal=MONGODB_URI="$env:MONGODB_URI" `
+            --from-literal=CLIENT_ORIGIN="$env:CLIENT_ORIGIN" `
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy Kubernetes manifests
+        shell: powershell
+        run: |
+          kubectl apply -f k8s/
+
+      - name: Restart application deployments
+        shell: powershell
+        run: |
+          kubectl rollout restart deployment railresolve-frontend -n railresolve
+          kubectl rollout restart deployment railresolve-express -n railresolve
+          kubectl rollout restart deployment railresolve-fastapi -n railresolve
+
+      - name: Wait for deployments
+        shell: powershell
+        run: |
+          kubectl rollout status deployment/railresolve-frontend -n railresolve
+          kubectl rollout status deployment/railresolve-express -n railresolve
+          kubectl rollout status deployment/railresolve-fastapi -n railresolve
+
+      - name: Verify pods
+        shell: powershell
+        run: |
+          kubectl get pods -n railresolve

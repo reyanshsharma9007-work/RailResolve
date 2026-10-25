@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    overscroll-behavior: none;
+  }
+  main > :first-child {
+    margin-top: 0 !important;
+  }
+  main > :last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.fade-in-enter {
+  animation: fadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cinematic Moving Train Effects */
+.cinematic-bg-drift {
+  will-change: transform, opacity;
+  animation: bgDrift 14s ease-in-out infinite alternate;
+}
+
+.cinematic-train-motion {
+  will-change: transform;
+  animation: trainTrackMotion 16s ease-in-out infinite alternate, microEngineRumble 0.2s ease-in-out infinite alternate;
+}
+
+.cinematic-speed-shimmer {
+  will-change: transform, opacity;
+  animation: speedShimmer 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes bgDrift {
+  0% {
+    transform: scale(1.08) translate3d(-8px, -2px, 0);
+  }
+  100% {
+    transform: scale(1.02) translate3d(8px, 2px, 0);
+  }
+}
+
+@keyframes trainTrackMotion {
+  0% {
+    transform: scale(1.0) translate3d(0px, 0px, 0);
+  }
+  50% {
+    transform: scale(1.03) translate3d(-3px, -1px, 0);
+  }
+  100% {
+    transform: scale(1.05) translate3d(2px, -2px, 0);
+  }
+}
+
+@keyframes microEngineRumble {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-0.5px);
+  }
+}
+
+@keyframes speedShimmer {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.12;
+  }
+  70% {
+    opacity: 0.12;
+  }
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-bg-drift,
+  .cinematic-train-motion,
+  .cinematic-speed-shimmer {
+    animation: none !important;
+    transform: none !important;
+  }
+}

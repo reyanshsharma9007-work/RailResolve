@@ -1,0 +1,186 @@
+{
+  "artifact": {
+    "file": "priority-1.0.0.joblib",
+    "sha256": "170a895351fa2b3e675c0d93ebb720dc8e0b7ec01c472445aeea6eeea57c5c5f"
+  },
+  "model_version": "priority-1.0.0",
+  "test_full": {
+    "n": 60,
+    "accuracy": 0.75,
+    "macro_f1": 0.7666,
+    "weighted_f1": 0.7618,
+    "per_class": {
+      "low": {
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "support": 6
+      },
+      "medium": {
+        "precision": 0.6,
+        "recall": 0.9,
+        "f1": 0.72,
+        "support": 20
+      },
+      "high": {
+        "precision": 0.92,
+        "recall": 0.6765,
+        "f1": 0.7797,
+        "support": 34
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "rows_true_cols_pred": [
+        [
+          4,
+          1,
+          0
+        ],
+        [
+          0,
+          18,
+          2
+        ],
+        [
+          0,
+          11,
+          23
+        ]
+      ]
+    },
+    "classification_report": "              precision    recall  f1-score   support\n\n         low       1.00      0.67      0.80         6\n      medium       0.60      0.90      0.72        20\n        high       0.92      0.68      0.78        34\n\n   micro avg       0.76      0.75      0.76        60\n   macro avg       0.84      0.75      0.77        60\nweighted avg       0.82      0.75      0.76        60\n",
+    "bootstrap": {
+      "accuracy_95ci": [
+        0.633,
+        0.85
+      ],
+      "macro_f1_95ci": [
+        0.57,
+        0.877
+      ],
+      "recall_95ci": {
+        "low": [
+          0.2,
+          1.0
+        ],
+        "medium": [
+          0.75,
+          1.0
+        ],
+        "high": [
+          0.514,
+          0.829
+        ]
+      }
+    }
+  },
+  "abstentions_on_test": 1,
+  "test_without_leaked_rows": {
+    "n": 52,
+    "accuracy": 0.75,
+    "macro_f1": 0.7539,
+    "weighted_f1": 0.7613,
+    "per_class": {
+      "low": {
+        "precision": 1.0,
+        "recall": 0.6,
+        "f1": 0.75,
+        "support": 5
+      },
+      "medium": {
+        "precision": 0.6154,
+        "recall": 0.8889,
+        "f1": 0.7273,
+        "support": 18
+      },
+      "high": {
+        "precision": 0.9091,
+        "recall": 0.6897,
+        "f1": 0.7843,
+        "support": 29
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "rows_true_cols_pred": [
+        [
+          3,
+          1,
+          0
+        ],
+        [
+          0,
+          16,
+          2
+        ],
+        [
+          0,
+          9,
+          20
+        ]
+      ]
+    },
+    "classification_report": "              precision    recall  f1-score   support\n\n         low       1.00      0.60      0.75         5\n      medium       0.62      0.89      0.73        18\n        high       0.91      0.69      0.78        29\n\n   micro avg       0.76      0.75      0.76        52\n   macro avg       0.84      0.73      0.75        52\nweighted avg       0.82      0.75      0.76        52\n",
+    "note": "8 test rows whose text also appears in train/val were removed"
+  },
+  "test_probability_quality": {
+    "n_scored": 59,
+    "ece_top_label": 0.0771,
+    "log_loss": 0.4955,
+    "brier_multiclass": 0.304,
+    "reference_log_loss_uniform": 1.0986,
+    "note": "n=60, indicative only; see out-of-fold reliability in priority_model_selection.json"
+  },
+  "baselines": {
+    "majority_class": {
+      "label": "high",
+      "accuracy": 0.5667,
+      "macro_f1": 0.2411
+    },
+    "existing_rule_based_predictor": {
+      "accuracy": 0.2667,
+      "macro_f1": 0.2657
+    }
+  },
+  "severity_target_analysis": {
+    "classes": {
+      "service_delay": 198,
+      "public_hazard": 129,
+      "service_failure": 123,
+      "information_query": 54
+    },
+    "cv_macro_f1_text_only": 0.8331,
+    "urgency_given_severity": {
+      "information_query": {
+        "high": 0,
+        "low": 52,
+        "medium": 2
+      },
+      "public_hazard": {
+        "high": 126,
+        "low": 0,
+        "medium": 3
+      },
+      "service_delay": {
+        "high": 38,
+        "low": 20,
+        "medium": 140
+      },
+      "service_failure": {
+        "high": 53,
+        "low": 0,
+        "medium": 70
+      }
+    },
+    "verdict": "Not used as the priority target. The 4 values describe the KIND of issue (hazard / failure / delay / information query), not a ranked scale, and they strongly imply urgency (see audit), so mixing them would leak the label."
+  }
+}

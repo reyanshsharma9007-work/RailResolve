@@ -1,0 +1,375 @@
+{
+  "files": {
+    "main": {
+      "name": "civicdex_main.csv",
+      "sha256": "b75934af682fe2275b1147cbdde3bc8b2c3411f685b988ec5ca5a127472f5467"
+    },
+    "adapted": {
+      "name": "civicdex_adapted.csv",
+      "sha256": "bfc4d897bcc6b096571e901d829aa9dbb96048743c693e23b6e8894776307cf1"
+    }
+  },
+  "main": {
+    "rows": 600,
+    "columns": [
+      "request_id",
+      "raw_text",
+      "normalized_text",
+      "english_gloss",
+      "language_type",
+      "intent",
+      "category",
+      "department",
+      "urgency",
+      "severity",
+      "locality",
+      "district",
+      "source_type",
+      "split"
+    ],
+    "dtypes": {
+      "request_id": "str",
+      "raw_text": "str",
+      "normalized_text": "str",
+      "english_gloss": "str",
+      "language_type": "str",
+      "intent": "str",
+      "category": "str",
+      "department": "str",
+      "urgency": "str",
+      "severity": "str",
+      "locality": "str",
+      "district": "str",
+      "source_type": "str",
+      "split": "str"
+    },
+    "missing_values": {},
+    "request_id_unique": true,
+    "urgency_values": {
+      "high": 261,
+      "medium": 257,
+      "low": 82
+    },
+    "severity_values": {
+      "service_delay": 228,
+      "public_hazard": 164,
+      "service_failure": 151,
+      "information_query": 57
+    },
+    "intent_values": {
+      "complaint": 352,
+      "follow_up": 115,
+      "status_query": 66,
+      "escalation": 25,
+      "information_request": 23,
+      "application_help": 16,
+      "document_help": 3
+    },
+    "language_type": {
+      "tamil": 487,
+      "tanglish": 74,
+      "code_mixed": 39
+    },
+    "source_type": {
+      "synthetic_realistic": 446,
+      "synthetic": 92,
+      "real": 62
+    },
+    "split_column": {
+      "train": 480,
+      "val": 60,
+      "test": 60
+    },
+    "urgency_by_split": {
+      "test": {
+        "high": 34,
+        "low": 6,
+        "medium": 20
+      },
+      "train": {
+        "high": 199,
+        "low": 71,
+        "medium": 210
+      },
+      "val": {
+        "high": 28,
+        "low": 5,
+        "medium": 27
+      }
+    },
+    "urgency_by_source_type": {
+      "real": {
+        "high": 20,
+        "low": 8,
+        "medium": 34
+      },
+      "synthetic": {
+        "high": 43,
+        "low": 13,
+        "medium": 36
+      },
+      "synthetic_realistic": {
+        "high": 198,
+        "low": 61,
+        "medium": 187
+      }
+    },
+    "duplicates": {
+      "raw_text": 9,
+      "normalized_text": 23,
+      "english_gloss": 42,
+      "english_gloss_after_normalisation": 44
+    },
+    "locality_values": {
+      "urban_area": 582,
+      "real": 18
+    },
+    "district_values": {
+      "Chennai": 600
+    },
+    "conflicting_urgency_gloss_groups": 1,
+    "cross_split_gloss_overlap": {
+      "train&val": 9,
+      "train&test": 5,
+      "val&test": 4
+    },
+    "urgency_purity_given_intent_severity": 0.793,
+    "urgency_purity_given_severity": 0.777,
+    "english_gloss_chars": {
+      "count": 600.0,
+      "mean": 29.0,
+      "std": 8.2,
+      "min": 9.0,
+      "25%": 23.8,
+      "50%": 28.0,
+      "75%": 33.0,
+      "max": 62.0
+    },
+    "tamil_script_share_raw_text": 0.557
+  },
+  "adapted": {
+    "rows": 660,
+    "columns": [
+      "request_id",
+      "raw_text",
+      "normalized_text",
+      "english_gloss",
+      "language_type",
+      "intent",
+      "category",
+      "department",
+      "urgency",
+      "severity",
+      "locality",
+      "district",
+      "source_type",
+      "split"
+    ],
+    "dtypes": {
+      "request_id": "str",
+      "raw_text": "str",
+      "normalized_text": "str",
+      "english_gloss": "str",
+      "language_type": "str",
+      "intent": "str",
+      "category": "str",
+      "department": "str",
+      "urgency": "str",
+      "severity": "str",
+      "locality": "str",
+      "district": "str",
+      "source_type": "str",
+      "split": "str"
+    },
+    "missing_values": {},
+    "request_id_unique": true,
+    "urgency_values": {
+      "high": 287,
+      "medium": 280,
+      "low": 93
+    },
+    "severity_values": {
+      "service_delay": 235,
+      "public_hazard": 174,
+      "service_failure": 156,
+      "information_query": 57,
+      "service_issue": 11,
+      "information": 10,
+      "health_issue": 4,
+      "service_request": 4,
+      "health_risk": 3,
+      "authority_issue": 3,
+      "status": 2,
+      "health_hazard": 1
+    },
+    "intent_values": {
+      "complaint": 390,
+      "follow_up": 118,
+      "status_query": 68,
+      "information_request": 28,
+      "escalation": 28,
+      "application_help": 21,
+      "document_help": 7
+    },
+    "language_type": {
+      "tamil": 487,
+      "tanglish": 83,
+      "english": 51,
+      "code_mixed": 39
+    },
+    "source_type": {
+      "synthetic_realistic": 499,
+      "synthetic": 95,
+      "real": 66
+    },
+    "split_column": {
+      "train": 540,
+      "val": 60,
+      "test": 60
+    },
+    "urgency_by_split": {
+      "test": {
+        "high": 34,
+        "low": 6,
+        "medium": 20
+      },
+      "train": {
+        "high": 225,
+        "low": 82,
+        "medium": 233
+      },
+      "val": {
+        "high": 28,
+        "low": 5,
+        "medium": 27
+      }
+    },
+    "urgency_by_source_type": {
+      "real": {
+        "high": 22,
+        "low": 9,
+        "medium": 35
+      },
+      "synthetic": {
+        "high": 44,
+        "low": 14,
+        "medium": 37
+      },
+      "synthetic_realistic": {
+        "high": 221,
+        "low": 70,
+        "medium": 208
+      }
+    },
+    "duplicates": {
+      "raw_text": 10,
+      "normalized_text": 23,
+      "english_gloss": 45,
+      "english_gloss_after_normalisation": 47
+    },
+    "locality_values": {
+      "urban_area": 642,
+      "real": 18
+    },
+    "district_values": {
+      "Chennai": 660
+    },
+    "conflicting_urgency_gloss_groups": 1,
+    "cross_split_gloss_overlap": {
+      "train&val": 9,
+      "train&test": 5,
+      "val&test": 4
+    },
+    "urgency_purity_given_intent_severity": 0.798,
+    "urgency_purity_given_severity": 0.779,
+    "english_gloss_chars": {
+      "count": 660.0,
+      "mean": 29.3,
+      "std": 8.0,
+      "min": 9.0,
+      "25%": 24.0,
+      "50%": 28.0,
+      "75%": 34.0,
+      "max": 62.0
+    },
+    "tamil_script_share_raw_text": 0.506
+  },
+  "cleaning": {
+    "main": {
+      "input_rows": 600,
+      "dropped_missing_or_invalid": 0,
+      "dropped_conflicting_label_duplicates": 0,
+      "dropped_exact_duplicates_in_pool": 36,
+      "test_rows_total": 60,
+      "test_rows_leaking_from_train_val": 8,
+      "rows_kept": 564,
+      "kept_by_split": {
+        "test": 60,
+        "train": 453,
+        "val": 51
+      },
+      "kept_label_distribution": {
+        "test": {
+          "high": 34,
+          "low": 6,
+          "medium": 20
+        },
+        "train": {
+          "high": 192,
+          "low": 67,
+          "medium": 194
+        },
+        "val": {
+          "high": 25,
+          "low": 5,
+          "medium": 21
+        }
+      }
+    },
+    "adapted": {
+      "input_rows": 660,
+      "dropped_missing_or_invalid": 0,
+      "dropped_conflicting_label_duplicates": 0,
+      "dropped_exact_duplicates_in_pool": 39,
+      "test_rows_total": 60,
+      "test_rows_leaking_from_train_val": 8,
+      "rows_kept": 621,
+      "kept_by_split": {
+        "test": 60,
+        "train": 510,
+        "val": 51
+      },
+      "kept_label_distribution": {
+        "test": {
+          "high": 34,
+          "low": 6,
+          "medium": 20
+        },
+        "train": {
+          "high": 217,
+          "low": 78,
+          "medium": 215
+        },
+        "val": {
+          "high": 25,
+          "low": 5,
+          "medium": 21
+        }
+      }
+    }
+  },
+  "adapted_vs_main": {
+    "extra_rows": 60,
+    "shared_rows": 600,
+    "shared_rows_changed_by_column": {},
+    "extra_language_type": {
+      "english": 51,
+      "tanglish": 9
+    },
+    "extra_splits": {
+      "train": 60
+    },
+    "main_severity_vocab": 4,
+    "adapted_severity_vocab": 12
+  }
+}

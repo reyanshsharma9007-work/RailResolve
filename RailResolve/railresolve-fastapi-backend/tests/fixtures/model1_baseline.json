@@ -1,0 +1,936 @@
+{
+ "cases": [
+  {
+   "analyze": {
+    "classification": {
+     "category": "Cleanliness",
+     "confidence": 0.75,
+     "department": "STATION_MAINTENANCE",
+     "reason": "Matched operational keywords: dirty, toilet",
+     "status": "RULE_BASED",
+     "subcategory": "Cleanliness"
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0",
+    "priority": {
+     "confidence": 0.7,
+     "humanReviewRequired": false,
+     "reasons": [
+      "dirty",
+      "ac"
+     ],
+     "recommendedPriority": "MEDIUM",
+     "status": "RULE_BASED"
+    },
+    "summary": "The toilet in coach S5 is dirty and smells"
+   },
+   "description": "The toilet in coach S5 is dirty and smells",
+   "hybrid": {
+    "category": "Cleanliness",
+    "confidence": 0.75,
+    "department": "STATION_MAINTENANCE",
+    "reason": "Matched operational keywords: dirty, toilet",
+    "status": "RULE_BASED",
+    "subcategory": "Cleanliness"
+   },
+   "raw_model": {
+    "confidence": 0.913,
+    "department": "TRAIN_MAINTENANCE",
+    "modelVersion": "category-svm-1.0.0",
+    "top": [
+     {
+      "department": "TRAIN_MAINTENANCE",
+      "score": 0.46
+     },
+     {
+      "department": "GENERAL_SUPPORT",
+      "score": -0.638
+     },
+     {
+      "department": "FOOD_WATER",
+      "score": -0.8
+     }
+    ]
+   },
+   "title": "Dirty toilet"
+  },
+  {
+   "analyze": {
+    "classification": {
+     "category": "Cleanliness",
+     "confidence": 0.75,
+     "department": "STATION_MAINTENANCE",
+     "reason": "Matched operational keywords: clean, hygiene",
+     "status": "RULE_BASED",
+     "subcategory": "Cleanliness"
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0",
+    "priority": {
+     "confidence": 0.55,
+     "humanReviewRequired": false,
+     "reasons": [
+      "No elevated urgency indicator matched."
+     ],
+     "recommendedPriority": "LOW",
+     "status": "RULE_BASED"
+    },
+    "summary": "Platform and waiting hall hygiene is very poor"
+   },
+   "description": "Platform and waiting hall hygiene is very poor",
+   "hybrid": {
+    "category": "Cleanliness",
+    "confidence": 0.75,
+    "department": "STATION_MAINTENANCE",
+    "reason": "Matched operational keywords: clean, hygiene",
+    "status": "RULE_BASED",
+    "subcategory": "Cleanliness"
+   },
+   "raw_model": {
+    "confidence": 0.386,
+    "department": "GENERAL_SUPPORT",
+    "modelVersion": "category-svm-1.0.0",
+    "top": [
+     {
+      "department": "GENERAL_SUPPORT",
+      "score": -0.295
+     },
+     {
+      "department": "TRAIN_MAINTENANCE",
+      "score": -0.398
+     },
+     {
+      "department": "STATION_MAINTENANCE",
+      "score": -0.854
+     }
+    ]
+   },
+   "title": "Cleanliness"
+  },
+  {
+   "analyze": {
+    "classification": {
+     "category": null,
+     "confidence": 0.476,
+     "department": null,
+     "reason": "Model confidence below threshold; unreviewed suggestion: Food & Water (0.476).",
+     "status": "HUMAN_REVIEW_REQUIRED",
+     "subcategory": null
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0",
+    "priority": {
+     "confidence": 0.7,
+     "humanReviewRequired": false,
+     "reasons": [
+      "water"
+     ],
+     "recommendedPriority": "MEDIUM",
+     "status": "RULE_BASED"
+    },
+    "summary": "Restroom has no water and is filthy, please clean"
+   },
+   "description": "Restroom has no water and is filthy, please clean",
+   "hybrid": {
+    "category": null,
+    "confidence": 0.476,
+    "department": null,
+    "reason": "Model confidence below threshold; unreviewed suggestion: Food & Water (0.476).",
+    "status": "HUMAN_REVIEW_REQUIRED",
+    "subcategory": null
+   },
+   "raw_model": {
+    "confidence": 0.476,
+    "department": "FOOD_WATER",
+    "modelVersion": "category-svm-1.0.0",
+    "top": [
+     {
+      "department": "FOOD_WATER",
+      "score": 0.159
+     },
+     {
+      "department": "TRAIN_MAINTENANCE",
+      "score": -0.003
+     },
+     {
+      "department": "GENERAL_SUPPORT",
+      "score": -0.504
+     }
+    ]
+   },
+   "title": ""
+  },
+  {
+   "analyze": {
+    "classification": {
+     "category": "Train Maintenance",
+     "confidence": 0.913,
+     "department": "TRAIN_MAINTENANCE",
+     "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+     "status": "ML_MODEL",
+     "subcategory": null
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0+category-svm-1.0.0",
+    "priority": {
+     "confidence": 0.7,
+     "humanReviewRequired": false,
+     "reasons": [
+      "ac",
+      "fan"
+     ],
+     "recommendedPriority": "MEDIUM",
+     "status": "RULE_BASED"
+    },
+    "summary": "The AC in coach B3 is not working and the fan is broken"
+   },
+   "description": "The AC in coach B3 is not working and the fan is broken",
+   "hybrid": {
+    "category": "Train Maintenance",
+    "confidence": 0.913,
+    "department": "TRAIN_MAINTENANCE",
+    "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+    "status": "ML_MODEL",
+    "subcategory": null
+   },
+   "raw_model": {
+    "confidence": 0.913,
+    "department": "TRAIN_MAINTENANCE",
+    "modelVersion": "category-svm-1.0.0",
+    "top": [
+     {
+      "department": "TRAIN_MAINTENANCE",
+      "score": 0.581
+     },
+     {
+      "department": "GENERAL_SUPPORT",
+      "score": -0.403
+     },
+     {
+      "department": "STATION_MAINTENANCE",
+      "score": -1.026
+     }
+    ]
+   },
+   "title": "AC problem"
+  },
+  {
+   "analyze": {
+    "classification": {
+     "category": "Train Operations",
+     "confidence": 0.95,
+     "department": "TRAIN_OPERATIONS",
+     "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+     "status": "ML_MODEL",
+     "subcategory": null
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0+category-svm-1.0.0",
+    "priority": {
+     "confidence": 0.55,
+     "humanReviewRequired": false,
+     "reasons": [
+      "No elevated urgency indicator matched."
+     ],
+     "recommendedPriority": "LOW",
+     "status": "RULE_BASED"
+    },
+    "summary": "Train is running three hours late and nobody is announcing anything"
+   },
+   "description": "Train is running three hours late and nobody is announcing anything",
+   "hybrid": {
+    "category": "Train Operations",
+    "confidence": 0.95,
+    "department": "TRAIN_OPERATIONS",
+    "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+    "status": "ML_MODEL",
+    "subcategory": null
+   },
+   "raw_model": {
+    "confidence": 0.95,
+    "department": "TRAIN_OPERATIONS",
+    "modelVersion": "category-svm-1.0.0",
+    "top": [
+     {
+      "department": "TRAIN_OPERATIONS",
+      "score": 1.495
+     },
+     {
+      "department": "FOOD_WATER",
+      "score": -1.156
+     },
+     {
+      "department": "GENERAL_SUPPORT",
+      "score": -1.216
+     }
+    ]
+   },
+   "title": "Late train"
+  },
+  {
+   "analyze": {
+    "classification": {
+     "category": "Booking & Refund",
+     "confidence": 0.95,
+     "department": "BOOKING_REFUND",
+     "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+     "status": "ML_MODEL",
+     "subcategory": null
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0+category-svm-1.0.0",
+    "priority": {
+     "confidence": 0.7,
+     "humanReviewRequired": false,
+     "reasons": [
+      "refund",
+      "ticket"
+     ],
+     "recommendedPriority": "MEDIUM",
+     "status": "RULE_BASED"
+    },
+    "summary": "Refund for my cancelled ticket has not been credited by IRCTC"
+   },
+   "description": "Refund for my cancelled ticket has not been credited by IRCTC",
+   "hybrid": {
+    "category": "Booking & Refund",
+    "confidence": 0.95,
+    "department": "BOOKING_REFUND",
+    "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+    "status": "ML_MODEL",
+    "subcategory": null
+   },
+   "raw_model": {
+    "confidence": 0.95,
+    "department": "BOOKING_REFUND",
+    "modelVersion": "category-svm-1.0.0",
+    "top": [
+     {
+      "department": "BOOKING_REFUND",
+      "score": 1.735
+     },
+     {
+      "department": "GENERAL_SUPPORT",
+      "score": -0.659
+     },
+     {
+      "department": "TICKET_TTE",
+      "score": -0.919
+     }
+    ]
+   },
+   "title": "Refund"
+  },
+  {
+   "analyze": {
+    "classification": {
+     "category": "Ticket / TTE",
+     "confidence": 0.943,
+     "department": "TICKET_TTE",
+     "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+     "status": "ML_MODEL",
+     "subcategory": null
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0+category-svm-1.0.0",
+    "priority": {
+     "confidence": 0.7,
+     "humanReviewRequired": false,
+     "reasons": [
+      "water"
+     ],
+     "recommendedPriority": "MEDIUM",
+     "status": "RULE_BASED"
+    },
+    "summary": "Pantry staff charged Rs 20 extra for a water bottle"
+   },
+   "description": "Pantry staff charged Rs 20 extra for a water bottle",
+   "hybrid": {
+    "category": "Ticket / TTE",
+    "confidence": 0.943,
+    "department": "TICKET_TTE",
+    "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+    "status": "ML_MODEL",
+    "subcategory": null
+   },
+   "raw_model": {
+    "confidence": 0.943,
+    "department": "TICKET_TTE",
+    "modelVersion": "category-svm-1.0.0",
+    "top": [
+     {
+      "department": "TICKET_TTE",
+      "score": 0.9
+     },
+     {
+      "department": "FOOD_WATER",
+      "score": -0.276
+     },
+     {
+      "department": "GENERAL_SUPPORT",
+      "score": -0.572
+     }
+    ]
+   },
+   "title": "Pantry"
+  },
+  {
+   "analyze": {
+    "classification": {
+     "category": "Ticket / TTE",
+     "confidence": 0.95,
+     "department": "TICKET_TTE",
+     "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+     "status": "ML_MODEL",
+     "subcategory": null
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0+category-svm-1.0.0",
+    "priority": {
+     "confidence": 0.55,
+     "humanReviewRequired": false,
+     "reasons": [
+      "No elevated urgency indicator matched."
+     ],
+     "recommendedPriority": "LOW",
+     "status": "RULE_BASED"
+    },
+    "summary": "TTE asked for a bribe to give me a berth"
+   },
+   "description": "TTE asked for a bribe to give me a berth",
+   "hybrid": {
+    "category": "Ticket / TTE",
+    "confidence": 0.95,
+    "department": "TICKET_TTE",
+    "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+    "status": "ML_MODEL",
+    "subcategory": null
+   },
+   "raw_model": {
+    "confidence": 0.95,
+    "department": "TICKET_TTE",
+    "modelVersion": "category-svm-1.0.0",
+    "top": [
+     {
+      "department": "TICKET_TTE",
+      "score": 0.772
+     },
+     {
+      "department": "GENERAL_SUPPORT",
+      "score": -0.497
+     },
+     {
+      "department": "TRAIN_MAINTENANCE",
+      "score": -0.782
+     }
+    ]
+   },
+   "title": "TTE"
+  },
+  {
+   "analyze": {
+    "classification": {
+     "category": null,
+     "confidence": 0.386,
+     "department": null,
+     "reason": "Model confidence below threshold; unreviewed suggestion: Train Maintenance (0.386).",
+     "status": "HUMAN_REVIEW_REQUIRED",
+     "subcategory": null
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0",
+    "priority": {
+     "confidence": 0.55,
+     "humanReviewRequired": false,
+     "reasons": [
+      "No elevated urgency indicator matched."
+     ],
+     "recommendedPriority": "LOW",
+     "status": "RULE_BASED"
+    },
+    "summary": "Something not covered by the supported taxonomy"
+   },
+   "description": "Something not covered by the supported taxonomy",
+   "hybrid": {
+    "category": null,
+    "confidence": 0.386,
+    "department": null,
+    "reason": "Model confidence below threshold; unreviewed suggestion: Train Maintenance (0.386).",
+    "status": "HUMAN_REVIEW_REQUIRED",
+    "subcategory": null
+   },
+   "raw_model": {
+    "confidence": 0.386,
+    "department": "TRAIN_MAINTENANCE",
+    "modelVersion": "category-svm-1.0.0",
+    "top": [
+     {
+      "department": "TRAIN_MAINTENANCE",
+      "score": -0.454
+     },
+     {
+      "department": "TRAIN_OPERATIONS",
+      "score": -0.554
+     },
+     {
+      "department": "GENERAL_SUPPORT",
+      "score": -0.743
+     }
+    ]
+   },
+   "title": "Unusual issue"
+  },
+  {
+   "analyze": {
+    "classification": {
+     "category": null,
+     "confidence": 0.476,
+     "department": null,
+     "reason": "Model confidence below threshold; unreviewed suggestion: General Support (0.476).",
+     "status": "HUMAN_REVIEW_REQUIRED",
+     "subcategory": null
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0",
+    "priority": {
+     "confidence": 0.95,
+     "humanReviewRequired": true,
+     "reasons": [
+      "fire",
+      "smoke"
+     ],
+     "recommendedPriority": "CRITICAL",
+     "status": "RULE_BASED"
+    },
+    "summary": "Smoke and fire reported near the pantry car"
+   },
+   "description": "Smoke and fire reported near the pantry car",
+   "hybrid": {
+    "category": null,
+    "confidence": 0.476,
+    "department": null,
+    "reason": "Model confidence below threshold; unreviewed suggestion: General Support (0.476).",
+    "status": "HUMAN_REVIEW_REQUIRED",
+    "subcategory": null
+   },
+   "raw_model": {
+    "confidence": 0.476,
+    "department": "GENERAL_SUPPORT",
+    "modelVersion": "category-svm-1.0.0",
+    "top": [
+     {
+      "department": "GENERAL_SUPPORT",
+      "score": -0.284
+     },
+     {
+      "department": "FOOD_WATER",
+      "score": -0.465
+     },
+     {
+      "department": "TICKET_TTE",
+      "score": -0.698
+     }
+    ]
+   },
+   "title": "Fire"
+  },
+  {
+   "analyze": {
+    "classification": {
+     "category": "General Support",
+     "confidence": 0.839,
+     "department": "GENERAL_SUPPORT",
+     "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+     "status": "ML_MODEL",
+     "subcategory": null
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0+category-svm-1.0.0",
+    "priority": {
+     "confidence": 0.95,
+     "humanReviewRequired": true,
+     "reasons": [
+      "unconscious"
+     ],
+     "recommendedPriority": "CRITICAL",
+     "status": "RULE_BASED"
+    },
+    "summary": "A passenger is unconscious and needs a doctor urgently"
+   },
+   "description": "A passenger is unconscious and needs a doctor urgently",
+   "hybrid": {
+    "category": "General Support",
+    "confidence": 0.839,
+    "department": "GENERAL_SUPPORT",
+    "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+    "status": "ML_MODEL",
+    "subcategory": null
+   },
+   "raw_model": {
+    "confidence": 0.839,
+    "department": "GENERAL_SUPPORT",
+    "modelVersion": "category-svm-1.0.0",
+    "top": [
+     {
+      "department": "GENERAL_SUPPORT",
+      "score": -0.113
+     },
+     {
+      "department": "TRAIN_OPERATIONS",
+      "score": -0.67
+     },
+     {
+      "department": "TICKET_TTE",
+      "score": -0.751
+     }
+    ]
+   },
+   "title": "Medical"
+  },
+  {
+   "analyze": {
+    "classification": {
+     "category": "Train Operations",
+     "confidence": 0.594,
+     "department": "TRAIN_OPERATIONS",
+     "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+     "status": "ML_MODEL",
+     "subcategory": null
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0+category-svm-1.0.0",
+    "priority": {
+     "confidence": 0.85,
+     "humanReviewRequired": false,
+     "reasons": [
+      "harassment"
+     ],
+     "recommendedPriority": "HIGH",
+     "status": "RULE_BASED"
+    },
+    "summary": "Group of men harassing women passengers in the coach"
+   },
+   "description": "Group of men harassing women passengers in the coach",
+   "hybrid": {
+    "category": "Train Operations",
+    "confidence": 0.594,
+    "department": "TRAIN_OPERATIONS",
+    "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+    "status": "ML_MODEL",
+    "subcategory": null
+   },
+   "raw_model": {
+    "confidence": 0.594,
+    "department": "TRAIN_OPERATIONS",
+    "modelVersion": "category-svm-1.0.0",
+    "top": [
+     {
+      "department": "TRAIN_OPERATIONS",
+      "score": -0.385
+     },
+     {
+      "department": "GENERAL_SUPPORT",
+      "score": -0.688
+     },
+     {
+      "department": "TRAIN_MAINTENANCE",
+      "score": -0.733
+     }
+    ]
+   },
+   "title": "Harassment"
+  },
+  {
+   "analyze": {
+    "classification": {
+     "category": null,
+     "confidence": 0.476,
+     "department": null,
+     "reason": "Model confidence below threshold; unreviewed suggestion: General Support (0.476).",
+     "status": "HUMAN_REVIEW_REQUIRED",
+     "subcategory": null
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0",
+    "priority": {
+     "confidence": 0.55,
+     "humanReviewRequired": false,
+     "reasons": [
+      "No elevated urgency indicator matched."
+     ],
+     "recommendedPriority": "LOW",
+     "status": "RULE_BASED"
+    },
+    "summary": "I lost my bag with laptop on the train yesterday"
+   },
+   "description": "I lost my bag with laptop on the train yesterday",
+   "hybrid": {
+    "category": null,
+    "confidence": 0.476,
+    "department": null,
+    "reason": "Model confidence below threshold; unreviewed suggestion: General Support (0.476).",
+    "status": "HUMAN_REVIEW_REQUIRED",
+    "subcategory": null
+   },
+   "raw_model": {
+    "confidence": 0.476,
+    "department": "GENERAL_SUPPORT",
+    "modelVersion": "category-svm-1.0.0",
+    "top": [
+     {
+      "department": "GENERAL_SUPPORT",
+      "score": -0.24
+     },
+     {
+      "department": "TRAIN_OPERATIONS",
+      "score": -0.425
+     },
+     {
+      "department": "TICKET_TTE",
+      "score": -0.815
+     }
+    ]
+   },
+   "title": "Lost bag"
+  },
+  {
+   "analyze": {
+    "classification": {
+     "category": null,
+     "confidence": 0.0,
+     "department": null,
+     "reason": "No safe rule matched the complaint text.",
+     "status": "HUMAN_REVIEW_REQUIRED",
+     "subcategory": null
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0",
+    "priority": {
+     "confidence": 0.55,
+     "humanReviewRequired": false,
+     "reasons": [
+      "No elevated urgency indicator matched."
+     ],
+     "recommendedPriority": "LOW",
+     "status": "RULE_BASED"
+    },
+    "summary": "12345 !!! @user"
+   },
+   "description": "12345 !!! @user",
+   "hybrid": {
+    "category": null,
+    "confidence": 0.0,
+    "department": null,
+    "reason": "No safe rule matched the complaint text.",
+    "status": "HUMAN_REVIEW_REQUIRED",
+    "subcategory": null
+   },
+   "raw_model": null,
+   "title": "x"
+  },
+  {
+   "analyze": {
+    "classification": {
+     "category": "Train Operations",
+     "confidence": 0.913,
+     "department": "TRAIN_OPERATIONS",
+     "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+     "status": "ML_MODEL",
+     "subcategory": null
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0+category-svm-1.0.0",
+    "priority": {
+     "confidence": 0.85,
+     "humanReviewRequired": false,
+     "reasons": [
+      "serious delay"
+     ],
+     "recommendedPriority": "HIGH",
+     "status": "RULE_BASED"
+    },
+    "summary": "Serious delay at the junction, no information given"
+   },
+   "description": "Serious delay at the junction, no information given",
+   "hybrid": {
+    "category": "Train Operations",
+    "confidence": 0.913,
+    "department": "TRAIN_OPERATIONS",
+    "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+    "status": "ML_MODEL",
+    "subcategory": null
+   },
+   "raw_model": {
+    "confidence": 0.913,
+    "department": "TRAIN_OPERATIONS",
+    "modelVersion": "category-svm-1.0.0",
+    "top": [
+     {
+      "department": "TRAIN_OPERATIONS",
+      "score": 0.198
+     },
+     {
+      "department": "TICKET_TTE",
+      "score": -0.762
+     },
+     {
+      "department": "STATION_MAINTENANCE",
+      "score": -0.785
+     }
+    ]
+   },
+   "title": "Delay"
+  },
+  {
+   "analyze": {
+    "classification": {
+     "category": "Booking & Refund",
+     "confidence": 0.95,
+     "department": "BOOKING_REFUND",
+     "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+     "status": "ML_MODEL",
+     "subcategory": null
+    },
+    "duplicate": {
+     "duplicateOf": null,
+     "isDuplicate": false,
+     "method": "token_jaccard_threshold_0.72",
+     "similarity": 0.0,
+     "status": "RULE_BASED_BASELINE"
+    },
+    "modelVersion": "railresolve-rules-1.1.0+category-svm-1.0.0",
+    "priority": {
+     "confidence": 0.7,
+     "humanReviewRequired": false,
+     "reasons": [
+      "ticket"
+     ],
+     "recommendedPriority": "MEDIUM",
+     "status": "RULE_BASED"
+    },
+    "summary": "Payment failed during ticket booking but money was deducted"
+   },
+   "description": "Payment failed during ticket booking but money was deducted",
+   "hybrid": {
+    "category": "Booking & Refund",
+    "confidence": 0.95,
+    "department": "BOOKING_REFUND",
+    "reason": "category-svm-1.0.0 (TF-IDF + LinearSVC); confidence is the estimated probability this prediction is correct, calibrated on held-out data.",
+    "status": "ML_MODEL",
+    "subcategory": null
+   },
+   "raw_model": {
+    "confidence": 0.95,
+    "department": "BOOKING_REFUND",
+    "modelVersion": "category-svm-1.0.0",
+    "top": [
+     {
+      "department": "BOOKING_REFUND",
+      "score": 0.902
+     },
+     {
+      "department": "GENERAL_SUPPORT",
+      "score": -0.544
+     },
+     {
+      "department": "TICKET_TTE",
+      "score": -0.853
+     }
+    ]
+   },
+   "title": "Booking"
+  }
+ ],
+ "model_loaded": true,
+ "model_version": "category-svm-1.0.0"
+}

@@ -10,10 +10,12 @@ async function markAiFailure(complaintId, startedAt, reason) {
   await ComplaintAiAnalysis.findOneAndUpdate(
     { complaintId },
     {
-      complaintId,
-      processingStatus: "FAILED",
-      processingTimeMs: Date.now() - startedAt,
-      failureReason: reason,
+      $set: {
+        complaintId,
+        processingStatus: "FAILED",
+        processingTimeMs: Date.now() - startedAt,
+        failureReason: reason,
+      },
     },
     { upsert: true, new: true },
   ).catch(() => {});
